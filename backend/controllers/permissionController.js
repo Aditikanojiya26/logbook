@@ -48,36 +48,3 @@ exports.assignPermission = async (req, res) => {
   }
 };
 
-exports.getParameters = async (req, res) => {
-  try {
-    const parameters = await Parameter.find({});
-    if (!parameters) return res.status(404).json({ error: "No parameters found" });
-    const groupedParams = {
-      Beginning: [],
-      Middle: [],
-      End: []
-    };
-
-    parameters.forEach(param => {
-      if (!groupedParams[param.shiftTime]) {
-        groupedParams[param.shiftTime] = [];
-      }
-      groupedParams[param.shiftTime].push({
-        name: param.name,
-        inputType: param.inputType,
-        unit: param.unit,
-        options: param.options
-      });
-    });
-    
-    res.json(groupedParams);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-exports.getForm=async (req, res) => {
-  const response = await fetch('http://localhost:5000/api/parameters');
-  const data = await response.json();
-  
-  res.render('form', { allParameters: data });
-}

@@ -8,6 +8,11 @@ const sce_parameterSchema = new mongoose.Schema({
         enum: ["Beginning", "Mid", "End", "Midnight"], 
         required: true 
     }, // Shift timing
+    sectionName: { 
+        type: String, 
+        enum: ["Operational Details","Important Parameters","Shift End Parameters","other",], 
+        required: true 
+    },
     unit: { type: String }, // Measurement unit (optional)
     options: [{ type: String }] // Only needed for dropdown fields (select type)
 });

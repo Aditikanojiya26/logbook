@@ -60,138 +60,518 @@ async function initDatabase() {
 
       }
 
-
-
       const sceParameters = [
-        { name: "LOAD", inputType: "number", shiftTime: "Beginning", unit: "MW" },
-        { name: "FREQUENCY", inputType: "number", shiftTime: "Beginning", unit: "Hz" },
-        { name: "MAIN STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "MAIN STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "MAIN STEAM FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "CRH STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "CRH STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "HRH STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "HRH STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "FURNACE PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC" },
-        { name: "PA HEADER PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC" },
-        { name: "FURNACE WIND BOX DP", inputType: "number", shiftTime: "Beginning", unit: "mmWC" },
-        { name: "ECONOMISER INLET FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "FEED WATER FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "SEPARATOR LEVEL", inputType: "number", shiftTime: "Beginning", unit: "METER" },
-        { name: "SEPARATOR PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "SH METAL TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "RH METAL TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "OPACITY", inputType: "number", shiftTime: "Beginning", unit: "mg/Nm³" },
-        { name: "SOX", inputType: "number", shiftTime: "Beginning", unit: "ppm" },
-        { name: "NOX", inputType: "number", shiftTime: "Beginning", unit: "ppm" },
-        { name: "AXIAL SHIFT", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "DIFF. EXPANSION HPT", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "DIFF. EXPANSION IPT", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "LUBE OIL TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "LUBE OIL PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "bar" },
-        { name: "CONDENSER-1/2 PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "bar" },
-        { name: "SEAL STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "milli bar" },
-        { name: "SEAL STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "AUXILIARY PRDS PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "bar" },
-        { name: "AUXILIARY PRDS TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "TDBFP-A/B SPEED", inputType: "number", shiftTime: "Beginning", unit: "RPM" },
-        { name: "MDBFP-C SPEED", inputType: "number", shiftTime: "Beginning", unit: "RPM" },
-        { name: "DERERATOR PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "DERERATOR LEVEL", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "HOT WELL LEVEL (COND.-1)", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "HOT WELL LEVEL (COND.-2)", inputType: "number", shiftTime: "Beginning", unit: "mm" },
-        { name: "H2 PURITY", inputType: "number", shiftTime: "Beginning", unit: "%" },
-        { name: "H2 DEW POINT", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "H2 CASING PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "SEAL OIL PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "GENERATOR SEAL OIL DP", inputType: "number", shiftTime: "Beginning", unit: "milli bar" },
-        { name: "COLD GAS TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "HOT GAS TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "WARM AIR TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "GENERATE EXHAUST PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "bar" },
-        { name: "PRIMARY WATER CONDY", inputType: "number", shiftTime: "Beginning", unit: "microS/cm2" },
-        { name: "PRIMARY WATER TEMP.", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "PRIMARY WATER FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "CPU-A INLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "CPU-A  OUTLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "CPU-B INLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "CPU-B  OUTLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "CPU-C INLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "CPU-C OUTLET DP", inputType: "number", shiftTime: "Beginning", unit: "mili bar" },
-        { name: "COAL MILL RC FEEDER-A FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-B FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-C FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-D FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-E FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-F FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-G FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "COAL MILL RC FEEDER-H FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "TOTAL COAL FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "HFO FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "LDO FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "TOTAL AIR FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr" },
-        { name: "O2 AT ECO INLET", inputType: "number", shiftTime: "Beginning", unit: "%" },
-        { name: "O2 AT ECO OUTLET", inputType: "number", shiftTime: "Beginning", unit: "%" },
-        { name: "HFO HEADER PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²" },
-        { name: "HFO HEADER TEMPRATURE", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "ATOMISING STEAM PRESSURE ", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm2" },
-        { name: "ATOMISING STEAM TEMP", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "LDO HEADER PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm2" },
-        { name: "INSTRUMENT AIR PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm2" },
-        { name: "CONDENSER 1/2 INLET TEMP", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "CONDENSER 1/2 OUTLET TEMP", inputType: "number", shiftTime: "Beginning", unit: "°C" },
-        { name: "CST LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "DMS-1 LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "DMS-2 LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "CW FORE BAY LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "LDO LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "HFO-A LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "HFO-B LEVEL", inputType: "text", shiftTime: "End" },
-        { name: "HFO GUNS IN SERVICE", inputType: "text", shiftTime: "End" },
-        { name: "HFO GUNS CONSUMPTION", inputType: "text", shiftTime: "End" },
-        { name: "LDO GUNS IN SERVICE", inputType: "text", shiftTime: "End" },
-        { name: "LDO GUNS CONSUMPTION", inputType: "text", shiftTime: "End" },
-        { name: "ESP HOPPER NOT EMPTY", inputType: "text", shiftTime: "End" },
-        { name: "ECO HOPPER NOT EMPTY", inputType: "text", shiftTime: "End" },
-        { name: "BAH EVACUATION TIME", inputType: "text", shiftTime: "End" },
-        { name: "AHP & DUCT HOPPER EVACUATION", inputType: "text", shiftTime: "End" },
-        { name: "SILO EVACUATION", inputType: "text", shiftTime: "End" },
-        { name: "HP WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "LP WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "SEAL WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "D.C. EQUIPMENT NOT AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "FIRE FIGHTING SYSTEM : AVAILABILITY", inputType: "text", shiftTime: "End" },
-        { name: "D.G. SET AVAILABILITY", inputType: "text", shiftTime: "End" },
-        { name: "MAJOR EQUIPMENT NOT AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "MAJOR AUX. FAILURE", inputType: "text", shiftTime: "End" },
-        { name: "HPH OUT OF SERVICE", inputType: "text", shiftTime: "End" },
-        { name: "LPH OUT OF SERVICE", inputType: "text", shiftTime: "End" },
-        { name: "H2 CYLINDER STOCK", inputType: "text", shiftTime: "End" },
-        { name: "H2 CYLINDER PRESS.", inputType: "text", shiftTime: "End" },
-        { name: "H2 BOTTLE CONSUMPTION", inputType: "text", shiftTime: "End" },
-        { name: "CO2 CYLINDER AVAILABLE", inputType: "text", shiftTime: "End" },
-        { name: "COAL CONSUMPTION", inputType: "text", shiftTime: "End", unit: "T/Hr" },
-        { name: "DM WATER CONSUMPTION", inputType: "text", shiftTime: "End", unit: "m3/Hr" },
-        { name: "BACKING DOWN FROM", inputType: "text", shiftTime: "End" },
-        { name: "BACKING DOWN TO", inputType: "text", shiftTime: "End" },
-        { name: "TOTAL GENERATION", inputType: "text", shiftTime: "End", unit: "MWh" },
-        { name: "MAX. LOAD", inputType: "text", shiftTime: "End", unit: "MW" },
-        { name: "MIN. LOAD", inputType: "text", shiftTime: "End", unit: "MW" },
-        { name: "UAT-A/TIE TO UNIT BUS -A", inputType: "text", shiftTime: "End", unit: "MWh" },
-        { name: "UAT-B/TIE TO UNIT BUS-B", inputType: "text", shiftTime: "End", unit: "MWh" },
-        { name: "ST - 8", inputType: "text", shiftTime: "End", unit: "MWh" },
-        { name: "HEAT RATE", inputType: "text", shiftTime: "End" },
-        { name: "REASON FOR OIL CONSUMPTION", inputType: "text", shiftTime: "End" },
-        { name: "REASON FOR LOW GENERATION", inputType: "text", shiftTime: "End" },
-        { name: "REASON FOR HIGH HEAT RATE", inputType: "text", shiftTime: "End" },
-        { "name": "Total Generation (MWh)", "inputType": "text", "shiftTime": "End" },
-        { "name": "Max / Min Load (MW)", "inputType": "text", "shiftTime": "End" },
-        { "name": "Coal Consumption", "inputType": "text", "shiftTime": "End" },
-        { "name": "Peak Hours Generation", "inputType": "text", "shiftTime": "End" },
-        { "name": "H₂ Bottle Consumption", "inputType": "text", "shiftTime": "End" },
-        { "name": "DM Water Consumption", "inputType": "text", "shiftTime": "End" }
-      ];
+      
+        
+          { name: "M/C", inputType: "select", shiftTime: "Beginning", options: ["BAR", "RSD", "FSD"], sectionName: "Operational Details" },
+          { name: "DATE", inputType: "date", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "TIME", inputType: "time", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "LOAD", inputType: "number", shiftTime: "Beginning", unit: "MW", sectionName: "Operational Details" },
+          { name: "FEED FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/HR", sectionName: "Operational Details" },
+          { name: "ECO INLET FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/HR", sectionName: "Operational Details" },
+          { name: "STEAM FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/HR", sectionName: "Operational Details" },
+          { name: "TOTAL COAL FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/HR", sectionName: "Operational Details" },
+        
+          { name: "CST LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "DMS-1 LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "DMS-2 LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "MOT LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "COT LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "DOT LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "LDO LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "HFO-A LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "HFO-B LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+        
+          { name: "400 KV BUS NO-1", inputType: "text", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "BUS NO-2", inputType: "text", shiftTime: "Beginning", sectionName: "Operational Details" },
+        
+          { name: "MAX. BRG. VIB.", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "BRG. NO.", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+        
+          { name: "ABS SHAFT VIB. MAX", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "ABS SHAFT VIB. MIN", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "PRDS CHARGED", inputType: "select", shiftTime: "Beginning", options: ["SELF", "AUX.BOILER"], sectionName: "Operational Details" },
+        
+          { name: "CW FORE BAY LEVEL", inputType: "number", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "DG SET READINESS:Main", inputType: "text", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "DG SET READINESS:Stand By", inputType: "text", shiftTime: "Beginning", sectionName: "Operational Details" },
+          { name: "CT BLOW DOWN POSITION", inputType: "number", shiftTime: "Beginning", unit: "TPH", sectionName: "Operational Details" },
+        
+          { name: "CPU IN SERVICE", inputType: "checkbox", shiftTime: "Beginning", options: ["A", "B", "C"], sectionName: "Operational Details" },
+        
+          { name: "A.C. PLANT", inputType: "checkbox", shiftTime: "Beginning", options: ["CHILLER UNIT", "VAM UNIT"], sectionName: "Operational Details" },
+        
+          { name: "BOILER IN", inputType: "select", shiftTime: "Beginning", options: ["WET MODE", "DRY MODE"], sectionName: "Operational Details" },
+        
+          { name: "FGMO", inputType: "select", shiftTime: "Beginning", options: ["on", "off"], sectionName: "Operational Details" },
+          { name: "CMC", inputType: "select", shiftTime: "Beginning", options: ["on", "off"], sectionName: "Operational Details" },
+          { name: "TSE", inputType: "select", shiftTime: "Beginning", options: ["on", "off"], sectionName: "Operational Details" },
+          { name: "Load Gradient", inputType: "select", shiftTime: "Beginning", options: ["on", "off"], sectionName: "Operational Details" },
+        
+        
 
+        { name: "LOAD", inputType: "number", shiftTime: "Beginning", unit: "MW",sectionName:"Important Parameters"},
+        
+          { name: "FREQUENCY", inputType: "number", shiftTime: "Beginning", unit: "Hz", sectionName: "Important Parameters" },
+          { name: "MAIN STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²", sectionName: "Important Parameters" },
+          { name: "MAIN STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "MAIN STEAM FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr", sectionName: "Important Parameters" },
+          { name: "CRH STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²", sectionName: "Important Parameters" },
+          { name: "CRH STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "HRH STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²", sectionName: "Important Parameters" },
+          { name: "HRH STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "FURNACE PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC", sectionName: "Important Parameters" },
+          { name: "PA HEADER PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC", sectionName: "Important Parameters" },
+          { name: "FD FAN OUTLET PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC", sectionName: "Important Parameters" },
+          { name: "ID FAN INLET PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "mmWC", sectionName: "Important Parameters" },
+          { name: "APH INLET TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "APH OUTLET TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "APH DP", inputType: "number", shiftTime: "Beginning", unit: "mmWC", sectionName: "Important Parameters" },
+          { name: "AIR FLOW", inputType: "number", shiftTime: "Beginning", unit: "Nm³/hr", sectionName: "Important Parameters" },
+          { name: "FLUE GAS FLOW", inputType: "number", shiftTime: "Beginning", unit: "Nm³/hr", sectionName: "Important Parameters" },
+          { name: "O₂", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "CO₂", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "CO", inputType: "number", shiftTime: "Beginning", unit: "ppm", sectionName: "Important Parameters" },
+          { name: "SO₂", inputType: "number", shiftTime: "Beginning", unit: "ppm", sectionName: "Important Parameters" },
+          { name: "NOx", inputType: "number", shiftTime: "Beginning", unit: "ppm", sectionName: "Important Parameters" },
+          { name: "FLY ASH %", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "BOTTOM ASH %", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "MW", inputType: "number", shiftTime: "Beginning", unit: "MW", sectionName: "Important Parameters" },
+          { name: "GENERATOR VOLTAGE", inputType: "number", shiftTime: "Beginning", unit: "kV", sectionName: "Important Parameters" },
+          { name: "GENERATOR CURRENT", inputType: "number", shiftTime: "Beginning", unit: "A", sectionName: "Important Parameters" },
+          { name: "GENERATOR POWER FACTOR", inputType: "number", shiftTime: "Beginning", unit: "", sectionName: "Important Parameters" },
+          { name: "BOILER LOAD", inputType: "number", shiftTime: "Beginning", unit: "T/Hr", sectionName: "Important Parameters" },
+          { name: "TURBINE LOAD", inputType: "number", shiftTime: "Beginning", unit: "MW", sectionName: "Important Parameters" },
+          { name: "BOILER FEED WATER FLOW", inputType: "number", shiftTime: "Beginning", unit: "T/Hr", sectionName: "Important Parameters" },
+          { name: "CW FLOW", inputType: "number", shiftTime: "Beginning", unit: "m³/hr", sectionName: "Important Parameters" },
+          { name: "DM WATER FLOW", inputType: "number", shiftTime: "Beginning", unit: "m³/hr", sectionName: "Important Parameters" },
+          { name: "DEMIN TANK LEVEL", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "RAW WATER TANK LEVEL", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "HOTWELL LEVEL", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "BOILER DRUM LEVEL", inputType: "number", shiftTime: "Beginning", unit: "mm", sectionName: "Important Parameters" },
+          { name: "COAL FEED RATE", inputType: "number", shiftTime: "Beginning", unit: "T/Hr", sectionName: "Important Parameters" },
+          { name: "MILL OUTLET TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "ESP INPUT KW", inputType: "number", shiftTime: "Beginning", unit: "kW", sectionName: "Important Parameters" },
+          { name: "ESP EFFICIENCY", inputType: "number", shiftTime: "Beginning", unit: "%", sectionName: "Important Parameters" },
+          { name: "COOLING TOWER INLET TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "COOLING TOWER OUTLET TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "GENERATOR BEARING TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "TURBINE BEARING TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
+          { name: "BOILER TUBE LEAKAGE STATUS", inputType: "text", shiftTime: "Beginning", unit: "", sectionName: "Important Parameters" },
+          { name: "EQUIPMENT ABNORMALITIES", inputType: "text", shiftTime: "Beginning", unit: "", sectionName: "Important Parameters" },
+          { name: "OPERATIONAL NOTES", inputType: "text", shiftTime: "Beginning", unit: "", sectionName: "Important Parameters" },
+
+          
+            { name: "CST LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "DMS-1 LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "DMS-2 LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HPH OUT OF SERVICE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "CW FORE BAY LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "LPH OUT OF SERVICE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "LDO LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HFO-A LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HFO-B LEVEL", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "H2 CYLINDER", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "H2 STOCK", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "H2 PRESS.", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HFO GUNS IN SERVICE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HFO GUNS CONSUMPTION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "H2 BOTTOL CONSUMPTION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "LDO GUNS IN SERVICE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "LDO GUNS CONSUMPTION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "CO2 CYLINDER AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "ESP HOPPER NOT EMPTY", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "COAL CONSUMPTION (T/Hr)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "ECO HOPPER NOT EMPTY", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "DM WATER CONSUMPTION (m3/Hr)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "BAH EVACUATION TIME", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "BACKING DOWN FROM", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "BACKING DOWN TO", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "AHP HOPPER EVACUATION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "DUCT HOPPER EVACUATION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "TOTAL GENERATION (MWh)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "SILO EVACUATION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "MAX. LOAD (MW)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "MIN. LOAD (MW)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HP WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "LP WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "SEAL WATER PUMP NOT AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "D.C. EQUIPMENT NOT AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "FIRE FIGHTING SYSTEM AVAILABILITY", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "D.G. SET AVAILABILITY", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "UAT-A", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "TIE TO UNIT BUS -A (MWh)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "UAT-B", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "TIE TO UNIT BUS -B (MWh)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "ST - 8 (MWh)", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "HEAT RATE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "REASON FOR OIL CONSUMPTION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "REASON FOR LOW GENERATION", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "REASON FOR HIGH HEAT RATE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "MAJOR EQUIPMENT NOT AVAILABLE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" },
+            { name: "MAJOR AUX. FAILURE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" }
+          ,
+            {
+              "name": "TOTAL GENERATION",
+              "unit": "MWh",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "Aux Power Consumption",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "HFO CONSUMPTION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "MAX. LOAD",
+              "unit": "MW",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "MIN. LOAD",
+              "unit": "MW",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "UT - 8A",
+              "unit": "MWh",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "HFO Transfer to Unit #8",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "COAL CONSUMPTION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "UT - 8B",
+              "unit": "MWh",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "LDO CONSUMPTION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "PICK HRS GENERATION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "ST - # 8",
+              "unit": "MWh",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "LDO Transfer to Unit #8",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "H2 BOTTLE CONSUMPTION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "DM WATER CONSUMPTION",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "UNIT TRIP",
+              "unit": "",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters",
+              "inputType": "text"
+            },
+            {
+              "name": "COAL MILL A - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL A - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL A - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL A - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL A - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL B - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL B - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL B - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL B - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL B - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL C - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL C - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL C - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL C - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL C - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL D - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL D - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL D - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL D - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL D - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL E - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL E - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL E - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL E - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL E - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL F - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL F - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL F - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL F - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL F - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL G - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL G - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL G - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL G - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL G - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+          
+            {
+              "name": "COAL MILL H - LOADING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL H - CONSUMPTION",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL H - REJECTION TRIPS",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL H - REJECTION (M3)",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+            {
+              "name": "COAL MILL H - REJECTION PENDING",
+              "inputType": "text",
+              "shiftTime": "MidNight",
+              "sectionName": "Shift End Parameters"
+            },
+      ];
+    
       for (let parameter of sceParameters) {
         await SCE_Parameter.create(parameter);
       }
