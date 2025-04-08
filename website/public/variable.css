@@ -1,0 +1,12 @@
+:root {
+    --primary-color: #212529;
+    --background-gradient: linear-gradient(135deg, #c4c4c4, #fefeff);
+    --card-bg: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.668);
+    --card-radius: 1rem;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --font-family: 'Segoe UI', sans-serif;
+    --btn-color: #ffffff;
+    --btn-bg: var(--primary-color);
+}
+

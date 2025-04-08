@@ -1,0 +1,30 @@
+body {
+    background: linear-gradient(135deg, #aeaeae, #fefeff);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .register-box {
+    background: white;
+    padding: 2rem;
+    border: 3px solid rgba(0, 0, 0, 0.668);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 65px auto;
+  }
+
+  @media (max-width: 576px) {
+    .register-box {
+      padding: 2rem;
+      margin: 60px auto 0;
+    }
+  }
+
+  .logbook {
+    text-decoration: none;
+    color: white;
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+  }

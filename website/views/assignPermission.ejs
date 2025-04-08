@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assign Permission</title>
+</head>
+<body>
+    <h2>Assign Permission</h2>
+    <form action="/assign-permission" method="POST">
+        <label>Select User:</label>
+        <select name="userId">
+            <% users.forEach(user => { %>
+                <option value="<%= user._id %>"><%= user.name %></option>
+            <% }) %>
+        </select>
+
+        <label>Select Shift:</label>
+        <select name="shiftId">
+            <% shifts.forEach(shift => { %>
+                <option value="<%= shift._id %>"><%= shift.name %></option>
+            <% }) %>
+        </select>
+
+        <label>Select Unit:</label>
+        <select name="unitId">
+            <% units.forEach(unit => { %>
+                <option value="<%= unit._id %>"><%= unit.name %></option>
+            <% }) %>
+        </select>
+
+        <button type="submit">Grant Permission</button>
+    </form>
+</body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+  
+    if (token) {
+      // Save to localStorage or sessionStorage for use in future API calls
+      localStorage.setItem("authToken", token);
+      console.log("Token saved:", token);
+    } else {
+      console.log("No token in URL");
+    }
+  </script>
+  
+</html>

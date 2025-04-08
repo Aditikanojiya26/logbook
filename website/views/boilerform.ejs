@@ -1,0 +1,17 @@
+<form action="/submit-boiler-form" method="POST">
+    <% auxiliaries.forEach(aux => { %>
+        <div class="auxiliary">
+            <h3><%= aux.name %></h3>
+            <% aux.options.forEach(option => { %>
+                <label>
+                    <%= option.optionName %>: <%= option.status %>
+                    <% if (option.status === 'Ready') { %>
+                        <!-- Checkbox for in-service marking -->
+                        <input type="checkbox" name="inServiceAuxiliaries[]" value="<%= aux._id %>_<%= option.optionName %>">
+                    <% } %>
+                </label>
+            <% }) %>
+        </div>
+    <% }) %>
+    <button type="submit">Submit</button>
+</form>
