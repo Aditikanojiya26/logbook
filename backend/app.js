@@ -18,8 +18,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../website/views"));
-app.set("")
+app.set('views', path.join(__dirname, '../website/views'));
+app.use(express.static(path.join(__dirname, '../website/public')));
+
+
 // Routes
 app.use("/", authRoutes);
 app.use("/", permissionRoutes);
