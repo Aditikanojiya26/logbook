@@ -6,7 +6,7 @@ const connectDB = require("./config/connectDB");
 
 const authRoutes = require("./routes/authRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
-
+const sceRoutes=require("../backend/routes/sceRoutes")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -25,6 +25,7 @@ app.use(express.static(path.join(__dirname, '../website/public')));
 // Routes
 app.use("/", authRoutes);
 app.use("/", permissionRoutes);
+app.use("/", sceRoutes);
 
 // Start server
 app.listen(PORT, () => {
