@@ -5,7 +5,8 @@ const Shift = require("../backend/models/shift");
 const Unit = require("../backend/models/unit");
 
 const SCE_Parameter = require("../backend/models/SCE_Parameter");
-const Designation = require("../backend/models/designation.js")
+const Designation = require("../backend/models/designation.js");
+const unit = require("../backend/models/unit");
 async function initDatabase() {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/logbook");
@@ -212,364 +213,118 @@ async function initDatabase() {
             { name: "MAJOR AUX. FAILURE", inputType: "text", shiftTime: "End", sectionName: "Shift End Parameters" }
           ,
             {
-              "name": "TOTAL GENERATION",
-              "unit": "MWh",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "TOTAL GENERATION",
+              unit: "MWh",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "Aux Power Consumption",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "Aux Power Consumption",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "HFO CONSUMPTION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "HFO CONSUMPTION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "MAX. LOAD",
-              "unit": "MW",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "MAX. LOAD",
+              unit: "MW",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "MIN. LOAD",
-              "unit": "MW",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "MIN. LOAD",
+              unit: "MW",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "UT - 8A",
-              "unit": "MWh",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "UT - 8A",
+              unit: "MWh",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "HFO Transfer to Unit #8",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "HFO Transfer to Unit #8",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "COAL CONSUMPTION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "COAL CONSUMPTION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "UT - 8B",
-              "unit": "MWh",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "UT - 8B",
+              unit: "MWh",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "LDO CONSUMPTION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "LDO CONSUMPTION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "PICK HRS GENERATION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "PICK HRS GENERATION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "ST - # 8",
-              "unit": "MWh",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "ST - # 8",
+              unit: "MWh",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "LDO Transfer to Unit #8",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "LDO Transfer to Unit #8",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "H2 BOTTLE CONSUMPTION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "H2 BOTTLE CONSUMPTION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "DM WATER CONSUMPTION",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "DM WATER CONSUMPTION",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
             {
-              "name": "UNIT TRIP",
-              "unit": "",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters",
-              "inputType": "text"
+              name: "UNIT TRIP",
+              unit: "",
+             shiftTime: "Midnight",
+              sectionName: "Shift End Parameters",
+             inputType: "text"
             },
-            {
-              "name": "COAL MILL A - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL A - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL A - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL A - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL A - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL B - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL B - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL B - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL B - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL B - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL C - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL C - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL C - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL C - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL C - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL D - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL D - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL D - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL D - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL D - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL E - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL E - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL E - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL E - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL E - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL F - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL F - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL F - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL F - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL F - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL G - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL G - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL G - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL G - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL G - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-          
-            {
-              "name": "COAL MILL H - LOADING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL H - CONSUMPTION",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL H - REJECTION TRIPS",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL H - REJECTION (M3)",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
-            {
-              "name": "COAL MILL H - REJECTION PENDING",
-              "inputType": "text",
-              "shiftTime": "MidNight",
-              "sectionName": "Shift End Parameters"
-            },
+            
       ];
     
       for (let parameter of sceParameters) {

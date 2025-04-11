@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SCE Form</title>
+</head>
+<body>
+  <h1>SCE Shift Form</h1>
+
+  <h1>Auxiliaries (from Auxiliary model)</h1>
+
+<% Object.keys(auxiliaries).forEach(shift => { %>
+  <h2><%= shift %> Shift - Auxiliaries</h2>
+
+  <% auxiliaries[shift].forEach(aux => { %>
+    <h3><%= aux.name %></h3>
+    <ul>
+      <% aux.options.forEach(opt => { %>
+        <li>
+          <%= opt.optionName %>:
+          <% if (opt.status === "Ready") { %>
+            <input type="checkbox" name="<%= aux.name %>_<%= opt.optionName %>"/>
+            <label>Ready</label>
+          <% } else { %>
+            <span><%= opt.status %></span>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% }) %>
+<% }) %>
+
+
+<% Object.keys(parameterAuxiliaries).forEach(shift => { %>
+  <% if (parameterAuxiliaries[shift].length > 0) { %>
+    <h2><%= shift %> Shift - Parameter Auxiliaries</h2>
+
+    <% parameterAuxiliaries[shift].forEach(aux => { %>
+      <h3><%= aux.name %></h3>
+
+      <% if (aux.reading && aux.reading.length > 0) { %>
+        <table border="1" cellpadding="8" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <% aux.options.forEach(opt => { %>
+                <th><%= opt.optionName %></th>
+              <% }) %>
+            </tr>
+          </thead>
+          <tbody>
+            <% aux.reading.forEach(read => { %>
+              <tr>
+                <td><%= read.parameterName %></td>
+                <% aux.options.forEach(opt => { %>
+                  <td>
+                    <input
+                      type="text"
+                      name="aux_<%= aux.name.replace(/\s+/g, '_') %>_<%= read.parameterName.replace(/\s+/g, '_') %>_<%= opt.optionName %>"
+                      placeholder="Enter value"
+                    />
+                  </td>
+                <% }) %>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <br />
+      <% } %>
+    <% }) %>
+  <% } %>
+<% }) %>
+
+
+
+  <hr>
+
+  <% Object.keys(parameters).forEach(shift => { %>
+    <h2><%= shift %> Shift - Parameters</h2>
+
+    <% Object.keys(parameters[shift]).forEach(section => { %>
+      <h3><%= section %></h3>
+      <ul>
+        <% parameters[shift][section].forEach(param => { %>
+          <li>
+            <%= param.name %> (<%= param.unit || '' %>):
+            <% if (param.inputType === "text") { %>
+              <input type="text" name="<%= param.name %>">
+            <% } else if (param.inputType === "dropdown") { %>
+              <select name="<%= param.name %>">
+                <% param.options.forEach(opt => { %>
+                  <option value="<%= opt %>"><%= opt %></option>
+                <% }) %>
+              </select>
+            <% } else { %>
+              <input type="number" name="<%= param.name %>">
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    <% }) %>
+  <% }) %>
+
+</body>
+</html>
