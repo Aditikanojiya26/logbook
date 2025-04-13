@@ -16,7 +16,7 @@ exports.getSCEData = async (req, res) => {
       Beginning: [],
       End: [],
       Middle: [],
-     
+
     };
     
     parameterAuxiliaries.forEach((aux) => {
@@ -51,36 +51,42 @@ exports.getSCEData = async (req, res) => {
         });
       });
       
+     
+  
       const groupedParams = {
         Beginning: {},
         Middle: {},
         End: {},
         Midnight: {}
       };
-  
+      
       parameters.forEach(param => {
         const shift = param.shiftTime;
         const section = param.sectionName;
-  
-        if (!groupedParams[shift]) {
-          groupedParams[shift] = {};
-        }
-  
+      
         if (!groupedParams[shift][section]) {
-          groupedParams[shift][section] = [];
+          groupedParams[shift][section] = new Map();
         }
-  
-        groupedParams[shift][section].push({
+      
+        // Use param name as key to prevent duplicates
+        groupedParams[shift][section].set(param.name, {
           name: param.name,
           inputType: param.inputType,
           unit: param.unit,
           options: param.options
         });
       });
+      
+      // Convert Maps back to arrays
+      for (const shift in groupedParams) {
+        for (const section in groupedParams[shift]) {
+          groupedParams[shift][section] = Array.from(groupedParams[shift][section].values());
+        }
+      }
+      
   
       const isBrowser = req.headers.accept && req.headers.accept.includes("text/html");
       
-      console.log(groupedParameterAux)
     if (isBrowser) {
       return res.render("sceForm.ejs", { auxiliaries: groupedAuxiliaries, parameters: groupedParams,parameterAuxiliaries: groupedParameterAux });
     } else {

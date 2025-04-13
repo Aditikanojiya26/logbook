@@ -112,7 +112,6 @@ async function initDatabase() {
         
 
         { name: "LOAD", inputType: "number", shiftTime: "Beginning", unit: "MW",sectionName:"Important Parameters"},
-        
           { name: "FREQUENCY", inputType: "number", shiftTime: "Beginning", unit: "Hz", sectionName: "Important Parameters" },
           { name: "MAIN STEAM PRESSURE", inputType: "number", shiftTime: "Beginning", unit: "Kg/cm²", sectionName: "Important Parameters" },
           { name: "MAIN STEAM TEMPERATURE", inputType: "number", shiftTime: "Beginning", unit: "°C", sectionName: "Important Parameters" },
