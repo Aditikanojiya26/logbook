@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/connectDB");
-
+const shiftRoutes = require('../backend/routes/shiftRoutes');
 const authRoutes = require("./routes/authRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const sceRoutes=require("../backend/routes/sceRoutes")
@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, '../website/public')));
 app.use("/", authRoutes);
 app.use("/", permissionRoutes);
 app.use("/", sceRoutes);
+app.use("/", shiftRoutes);
 
 // Start server
 app.listen(PORT, () => {

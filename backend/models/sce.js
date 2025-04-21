@@ -9,8 +9,8 @@ const sceSchema = new mongoose.Schema({
     shiftBeginning: {
         parameters: [
             {
-                name: { type: String, required: true },  // Parameter name
-                value: { type: String, required: true }  // Value entered by the user
+                name: { type: String },  // Parameter name
+                value: { type: String }  // Value entered by the user
             }
         ],
         inServiceAuxiliaries: [
@@ -25,8 +25,8 @@ const sceSchema = new mongoose.Schema({
     shiftMid: {
         parameters: [
             {
-                name: { type: String, required: true },  // Parameter name
-                value: { type: String, required: true }  // Value entered by the user
+                name: { type: String },  // Parameter name
+                value: { type: String }  // Value entered by the user
             }
         ]
     },
@@ -34,8 +34,8 @@ const sceSchema = new mongoose.Schema({
     shiftEnd: {
         parameters: [
             {
-                name: { type: String, required: true },  // Parameter name
-                value: { type: String, required: true }  // Value entered by the user
+                name: { type: String },  // Parameter name
+                value: { type: String }  // Value entered by the user
             }
         ]
     
@@ -44,8 +44,8 @@ const sceSchema = new mongoose.Schema({
     midnight_details: {
         parameters: [
             {
-                name: { type: String, required: true },  // Parameter name
-                value: { type: String, required: true }  // Value entered by the user
+                name: { type: String },  // Parameter name
+                value: { type: String }  // Value entered by the user
             }
         ]
     }
