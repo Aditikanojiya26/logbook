@@ -1,0 +1,25 @@
+.section-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .field-row {
+    transition: background-color 0.2s;
+  }
+  
+  .field-row:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  

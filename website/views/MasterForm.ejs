@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Logbook Master Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/MasterFormCss.css" rel="stylesheet">
+</head>
+
+<body class="container mt-5">
+  <header class="mb-4">
+    <h1 class="h2">Create Logbook Master Form</h1>
+    <p class="text-muted">Configure the structure of your logbook by adding sections and fields for different shift
+      periods.</p>
+  </header>
+
+  <form id="masterForm" action="/admin/CreateForm" method="POST" class="needs-validation" novalidate>
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <label for="unitId" class="form-label">Unit ID</label>
+        <input type="text" id="unitId" name="unit" class="form-control" required>
+        <div class="invalid-feedback">Please provide a unit ID.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="role" class="form-label">Role</label>
+        <input type="text" id="role" name="role" class="form-control" required>
+        <div class="invalid-feedback">Please specify a role.</div>
+      </div>
+    </div>
+
+    <!-- Shift Begin Sections -->
+    <section class="section-container" id="shiftBegin">
+      <h2 class="h4 mb-3">Shift Begin Sections</h2>
+      <div id="shiftBeginSections"></div>
+      <button type="button" class="btn btn-primary" onclick="addSection('shiftBegin')"
+        aria-label="Add shift begin section">
+        <i class="bi bi-plus-lg"></i> Add Shift Begin Section
+      </button>
+    </section>
+
+    <!-- Shift Mid Sections -->
+    <section class="section-container" id="shiftMid">
+      <h2 class="h4 mb-3">Shift Mid Sections</h2>
+      <div id="shiftMidSections"></div>
+      <button type="button" class="btn btn-primary" onclick="addSection('shiftMid')" aria-label="Add shift mid section">
+        <i class="bi bi-plus-lg"></i> Add Shift Mid Section
+      </button>
+    </section>
+
+    <!-- Shift End Sections -->
+    <section class="section-container" id="shiftEnd">
+      <h2 class="h4 mb-3">Shift End Sections</h2>
+      <div id="shiftEndSections"></div>
+      <button type="button" class="btn btn-primary" onclick="addSection('shiftEnd')" aria-label="Add shift end section">
+        <i class="bi bi-plus-lg"></i> Add Shift End Section
+      </button>
+    </section>
+
+    <!-- Midnight Sections -->
+    <section class="section-container" id="midnight">
+      <h2 class="h4 mb-3">Midnight Sections</h2>
+      <div id="midnightSections"></div>
+      <button type="button" class="btn btn-primary" onclick="addSection('midnight')" aria-label="Add midnight section">
+        <i class="bi bi-plus-lg"></i> Add Midnight Section
+      </button>
+    </section>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success">Save Logbook Master</button>
+    </div>
+  </form>
+  <script src="/scripts/MasterFormScript.js"></script> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</body>
+
+</html>
