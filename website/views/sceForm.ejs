@@ -10,34 +10,161 @@
   <!-- Bootstrap CSS v5.2.1 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-</head>
-<style>
-  .hidden { display: none; }
+  <link rel="stylesheet" href="form.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-</style>
+</head>
 
 <body>
-  <header>
-    <!-- place navbar here -->
+  <header class="bg-secondary text-white text-center py-4">
     <h1>SCE Shift Form</h1>
   </header>
 
-  <main>
-    <div class="mb-4 flex gap-4">
-      <button class="shift-tab bg-blue-500 text-black px-4 py-2 rounded" data-target="begForm">Shift Beginning</button>
-      <button class="shift-tab bg-green-500 text-black px-4 py-2 rounded" data-target="endForm">Shift End</button>
-      <button class="shift-tab bg-purple-500 text-black px-4 py-2 rounded" data-target="midnightForm">Midnight</button>
+  <main class="container mt-3">
+    <!-- Navigation Buttons -->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
+      <button class="shift-tab btn btn-primary px-4 py-2 rounded " value="shiftBeginning"
+        data-target="shiftBeginning">Shift Beginning</button>
+      <button class="shift-tab btn btn-primary px-4 py-2 rounded" value="shiftEnd" data-target="shiftEnd">Shift
+        End</button>
+      <button class="shift-tab btn btn-primary px-4 py-2 rounded" value="shiftMid"
+        data-target="shiftMid">Midnight</button>
     </div>
 
-    <form id="begForm">
-      <div class="status_at_shift_beg">
-        <h1>Status At Shift Beginning</h1>
-        <!-- operational_details -->
-        <div class="operational_details">
-          <h1>Operational Details</h1>
+    <form id="shiftForm" class="form-group">
+      <!-- Shift Selection -->
+      <!-- <label for="shiftSelect">Select Shift:</label> -->
+      <!-- <select id="shiftSelect">
+        <option value="shiftBeginning">Shift Beginning</option>
+        <option value="midNight">Midnight</option>
+        <option value="shiftEnd">Shift End</option>
+      </select> -->
 
+      <div id="shiftBeginning" class="shift-section hidden">
+        <div class="status_at_shift_beg mb-4">
+          <h1>Status At Shift Beginning</h1>
+          <!-- operational_details -->
+          <div class="operational_details">
+            <h1>Operational Details</h1>
+
+            <div class="form-grid">
+              <% parameters["Beginning"]["Operational Details"].forEach(param=> { %>
+                <div class="form-item">
+                  <label>
+                    <%= param.name %>
+                      <% if (param.unit) { %> (<%= param.unit %>) <% } %>
+                  </label>
+
+                  <% if (param.inputType==="text" ) { %>
+                    <input type="text" name="<%= param.name %>">
+
+                    <% } else if (param.inputType==="select" || param.inputType==="dropdown" ) { %>
+                      <select name="<%= param.name %>">
+                        <% param.options.forEach(opt=> { %>
+                          <option value="<%= opt %>">
+                            <%= opt %>
+                          </option>
+                          <% }) %>
+                      </select>
+
+                      <% } else if (param.inputType==="date" ) { %>
+                        <input type="date" name="<%= param.name %>">
+
+                        <% } else if (param.inputType==="time" ) { %>
+                          <input type="time" name="<%= param.name %>">
+
+                          <% } else { %> <!-- Default to number input -->
+                            <input type="number" name="<%= param.name %>">
+                            <% } %>
+                </div>
+                <% }) %>
+            </div>
+          </div>
+          <br>
+          <hr>
+
+          <!-- aux_status -->
+          <div class="aux_status">
+            <h2>Auxiliary Status</h2>
+
+            <% auxiliaries["Beginning"].forEach(aux=> { %>
+              <div class="form-item" data-auxid="<%= aux._id %>" data-auxname="<%= aux.name %>">
+                <h4>
+                  <%= aux.name %>
+                </h4>
+                <% aux.options.forEach(opt=> { %>
+                  <div class="checkbox-option">
+                    <% if (opt.status==="Ready" ) { %>
+                      <label>
+                        <input type="checkbox" name="<%= aux.name.replace(/\s+/g, '') %><%= opt.optionName %>"
+                          value="<%= opt.optionName %>">
+                        <%= opt.optionName %> (Ready)
+                      </label>
+                      <% } else { %>
+                        <span>
+                          <%= opt.optionName %>: <%= opt.status %>
+                        </span>
+                        <% } %>
+                  </div>
+                  <% }) %>
+              </div>
+              <% }) %>
+          </div>
+        </div><br>
+        <hr>
+
+        <div class="important_params">
+          <h2>Important Parameters At Shift Beginning</h2>
+
+          <% const importantParams=parameters["Beginning"]["Important Parameters"]; %>
+            <% if (importantParams && importantParams.length> 0) { %>
+              <div class="form-grid">
+                <% importantParams.forEach(param=> { %>
+                  <div class="form-item">
+                    <label for="<%= param.name.replace(/\s+/g, '_') %>">
+                      <%= param.name %>
+                        <% if (param.unit) { %> (<%= param.unit %>) <% } %>
+
+                    </label>
+
+                    <% if (param.inputType==="number" ) { %>
+                      <input type="number" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
+                        placeholder="Enter value" />
+                      <% } else if (param.inputType==="text" ) { %>
+                        <input type="text" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
+                          placeholder="Enter value" />
+                        <% } else if (param.inputType==="select" ) { %>
+                          <select name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>">
+                            <% param.options.forEach(opt=> { %>
+                              <option value="<%= opt %>">
+                                <%= opt %>
+                              </option>
+                              <% }) %>
+                          </select>
+                          <% } else if (param.inputType==="date" ) { %>
+                            <input type="date" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
+                            <% } else if (param.inputType==="time" ) { %>
+                              <input type="time" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
+                              <% } %>
+                  </div>
+                  <% }) %>
+              </div>
+              <% } else { %>
+                <p>No important parameters available.</p>
+                <% } %>
+
+        </div>
+        <br>
+
+      </div>
+
+      <div id="shiftEnd" class="shift-section hidden">
+        <div class="Shift_End_Parameters">
+
+
+          <h2>Status at Shift End </h2>
           <div class="form-grid">
-            <% parameters["Beginning"]["Operational Details"].forEach(param=> { %>
+            <% parameters["End"]["Shift End Parameters"].forEach(param=> { %>
               <div class="form-item">
                 <label>
                   <%= param.name %>
@@ -69,221 +196,224 @@
               <% }) %>
           </div>
         </div>
-        <br>
-        <hr>
-
-        <!-- aux_status -->
-        <div class="aux_status">
-          <h2>Auxiliary Status</h2>
-
-          <% if (auxiliaries["Beginning"] && auxiliaries["Beginning"].length> 0) { %>
-            <div class="form-grid">
-              <% auxiliaries["Beginning"].forEach(aux=> { %>
-                <div class="form-item">
-                  <h4>
-                    <%= aux.name %>
-                  </h4>
-                  <% aux.options.forEach(opt=> { %>
-                    <div class="checkbox-option">
-                      <% if (opt.status==="Ready" ) { %>
-                        <label>
-                          <input type="checkbox" name="<%= aux.name.replace(/\s+/g, '') %><%= opt.optionName %>">
-                          <%= opt.optionName %> (Ready)
-                        </label>
-                        <% } else { %>
-                          <span>
-                            <%= opt.optionName %>: <%= opt.status %>
-                          </span>
-                          <% } %>
-                    </div>
-                    <% }) %>
-                </div>
-                <% }) %>
-            </div>
-            <% } else { %>
-              <p>No auxiliaries available for the Beginning shift.</p>
-              <% } %>
-        </div>
-      </div><br>
-      <hr>
-
-      <div class="important_params">
-        <h2>Important Parameters At Shift Beginning</h2>
-
-        <% const importantParams=parameters["Beginning"]["Important Parameters"]; %>
-          <% if (importantParams && importantParams.length> 0) { %>
-            <div class="form-grid">
-              <% importantParams.forEach(param=> { %>
-                <div class="form-item">
-                  <label for="<%= param.name.replace(/\s+/g, '_') %>">
-                    <%= param.name %>
-                      <% if (param.unit) { %> (<%= param.unit %>) <% } %>
-
-                  </label>
-
-                  <% if (param.inputType==="number" ) { %>
-                    <input type="number" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
-                      placeholder="Enter value" />
-                    <% } else if (param.inputType==="text" ) { %>
-                      <input type="text" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
-                        placeholder="Enter value" />
-                      <% } else if (param.inputType==="select" ) { %>
-                        <select name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>">
-                          <% param.options.forEach(opt=> { %>
-                            <option value="<%= opt %>">
-                              <%= opt %>
-                            </option>
-                            <% }) %>
-                        </select>
-                        <% } else if (param.inputType==="date" ) { %>
-                          <input type="date" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
-                          <% } else if (param.inputType==="time" ) { %>
-                            <input type="time" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
-                            <% } %>
-                </div>
-                <% }) %>
-            </div>
-            <% } else { %>
-              <p>No important parameters available.</p>
-              <% } %>
-
       </div>
-      <br>
-      <button type="submit">Submit</button>
-    </form>
 
-    <form id="endForm">
-      <h2>Status at Shift End </h2>
-      <div class="form-grid">
-        <% parameters["End"]["Shift End Parameters"].forEach(param=> { %>
-          <div class="form-item">
-            <label>
-              <%= param.name %>
-                <% if (param.unit) { %> (<%= param.unit %>) <% } %>
-            </label>
+      <div id="shiftMid" class="shift-section hidden">
+        <h2>Midnight - Shift End Parameters</h2>
+        <% if (parameters.Midnight && parameters.Midnight["Shift End Parameters"]) { %>
+          <% parameters.Midnight["Shift End Parameters"].forEach(param=> { %>
+            <div class="form-group">
+              <label for="<%= param.name.replace(/\s+/g, '_') %>">
+                <%= param.name %>
+                  <% if (param.unit) { %> (<%= param.unit %>) <% } %>
+              </label>
+              <input type="<%= param.inputType || 'text' %>" name="midnight_<%= param.name.replace(/\s+/g, '_') %>"
+                id="<%= param.name.replace(/\s+/g, '_') %>" placeholder="Enter value" />
+            </div>
+            <% }) %>
+              <% } else { %>
+                <p>No Shift End Parameters found for Midnight.</p>
+                <% } %>
 
-            <% if (param.inputType==="text" ) { %>
-              <input type="text" name="<%= param.name %>">
-
-              <% } else if (param.inputType==="select" || param.inputType==="dropdown" ) { %>
-                <select name="<%= param.name %>">
-                  <% param.options.forEach(opt=> { %>
-                    <option value="<%= opt %>">
-                      <%= opt %>
-                    </option>
-                    <% }) %>
-                </select>
-
-                <% } else if (param.inputType==="date" ) { %>
-                  <input type="date" name="<%= param.name %>">
-
-                  <% } else if (param.inputType==="time" ) { %>
-                    <input type="time" name="<%= param.name %>">
-
-                    <% } else { %> <!-- Default to number input -->
-                      <input type="number" name="<%= param.name %>">
-                      <% } %>
-          </div>
-          <% }) %>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  
-    <form id="midnightForm">
-      <h2>Midnight - Shift End Parameters</h2>
-      <% if (parameters.Midnight && parameters.Midnight["Shift End Parameters"]) { %>
-        <% parameters.Midnight["Shift End Parameters"].forEach(param=> { %>
-          <div class="form-group">
-            <label for="<%= param.name.replace(/\s+/g, '_') %>">
-              <%= param.name %>
-                <% if (param.unit) { %> (<%= param.unit %>) <% } %>
-            </label>
-            <input type="<%= param.inputType || 'text' %>" name="midnight_<%= param.name.replace(/\s+/g, '_') %>"
-              id="<%= param.name.replace(/\s+/g, '_') %>" placeholder="Enter value" />
-          </div>
-          <% }) %>
-            <% } else { %>
-              <p>No Shift End Parameters found for Midnight.</p>
-              <% } %>
-
-                <% Object.keys(parameterAuxiliaries).forEach(shift=> { %>
-                  <% if (parameterAuxiliaries[shift].length> 0) { %>
-                    <h2>
-                      Midnight Details
-                    </h2>
-                    <% parameterAuxiliaries[shift].forEach(aux=> { %>
-                      <% if (aux.reading && aux.reading.length> 0) { %>
-                        <table border="1" cellpadding="8" cellspacing="0">
-                          <thead>
-                            <tr>
-                              <th>Parameter</th>
-                              <% aux.options.forEach(opt=> { %>
-                                <th>
-                                  <%= opt.optionName %>
-                                </th>
-                                <% }) %>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <% aux.reading.forEach(read=> { %>
+                  <% Object.keys(parameterAuxiliaries).forEach(shift=> { %>
+                    <% if (parameterAuxiliaries[shift].length> 0) { %>
+                      <h2>
+                        Midnight Details
+                      </h2>
+                      <% parameterAuxiliaries[shift].forEach(aux=> { %>
+                        <% if (aux.reading && aux.reading.length> 0) { %>
+                          <table border="1" cellpadding="8" cellspacing="0">
+                            <thead>
                               <tr>
-                                <td>
-                                  <%= read.parameterName %>
-                                </td>
+                                <th>Parameter</th>
                                 <% aux.options.forEach(opt=> { %>
-                                  <td>
-                                    <input type="text"
-                                      name="aux_<%= aux.name.replace(/\s+/g, '') %><%= read.parameterName.replace(/\s+/g, '') %><%= opt.optionName %>"
-                                      placeholder="Enter value" />
-                                  </td>
+                                  <th>
+                                    <%= opt.optionName %>
+                                  </th>
                                   <% }) %>
                               </tr>
-                              <% }) %>
-                          </tbody>
-                        </table>
-                        <br />
-                        <% } %>
-                          <% }) %>
-                            <% } %>
-                              <% }) %>
+                            </thead>
+                            <tbody>
+                              <% aux.reading.forEach(read=> { %>
+                                <tr>
+                                  <td>
+                                    <%= read.parameterName %>
+                                  </td>
+                                  <% aux.options.forEach(opt=> { %>
+                                    <td>
+                                      <input type="text"
+                                        name="aux_<%= aux.name.replace(/\s+/g, '') %><%= read.parameterName.replace(/\s+/g, '') %><%= opt.optionName %>"
+                                        placeholder="Enter value" />
+                                    </td>
+                                    <% }) %>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                          </table>
+                          <br />
+                          <% } %>
+                            <% }) %>
+                              <% } %>
+                                <% }) %>
 
+      </div>
 
-
-                                <button type="submit">Submit</button>
+      <button id="submitButton" type="submit">Submit</button>
     </form>
   </main>
-  <footer>
-    <!-- place footer here -->
-  </footer>
-  <!-- Bootstrap JavaScript Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-    crossorigin="anonymous"></script>
 </body>
-</html>
-
- 
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- inside views/page.ejs -->
 <script>
-  $(document).ready(function () {
-    // Hide all forms initially
-    $('#begForm, #endForm, #midnightForm').hide();
+  const permission = <%- JSON.stringify(permission) %>;
+  console.log("Permission from server:", permission);
+</script>
 
-    // Handle button clicks
+<script>
+
+  let selectedShift = "shiftBeginning";
+  console.log(selectedShift)
+  $(document).ready(function () {
     $('.shift-tab').click(function () {
-      const target = $(this).data('target');
-      
-      // Hide all and show only the clicked one
-      $('#begForm, #endForm, #midnightForm').hide();
-      $('#' + target).show();
+      const targetForm = $(this).data('target');
+      selectedShift = $(this).val();
+
+      // Hide all shift sections
+      $('.shift-section').addClass('hidden');
+
+      // Show the selected section
+      const $target = $('#' + targetForm);
+      if ($target.length) {
+        $target.removeClass('hidden');
+      } else {
+        console.warn('No matching section for:', targetForm);
+      }
     });
 
-    // Optional: show the first form by default
-    $('#begForm').show();
+    // Show the first form by default
+    $('.shift-tab').first().click();
+  });
+
+
+  // When the form is submitted
+  document.getElementById("shiftForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+
+
+
+    // Fetch permission values (injected in EJS or stored in hidden inputs)
+
+    const userId = permission.userId;
+    const unitId = permission.unitId;
+    const shiftId = permission.shiftId;
+    const shiftStartTime = new Date().toISOString(); // Or permission.shiftStartTime if stored
+
+    // Collect data for the selected shift
+    const shiftSection = document.getElementById(selectedShift);
+  const parameters = [];
+  
+  // Updated selector to properly get all inputs in the current section
+  let parameterInputs;
+  if (selectedShift === "shiftBeginning") {
+    parameterInputs = shiftSection.querySelectorAll(`
+      .operational_details input, 
+      .operational_details select,
+      .important_params input,
+      .important_params select
+    `);
+  } else if (selectedShift === "shiftEnd") {
+    parameterInputs = shiftSection.querySelectorAll(`
+      .Shift_End_Parameters input,
+      .Shift_End_Parameters select
+    `);
+  } else if (selectedShift === "shiftMid") {
+    parameterInputs = shiftSection.querySelectorAll(`
+      input:not([type="checkbox"]),
+      select
+    `);
+  }
+  
+  parameterInputs.forEach(input => {
+    if (input.name && input.value !== undefined && input.value!== "") {
+      parameters.push({
+        name: input.name.trim(),
+        value: input.value.trim()
+      });
+    }
+  });
+
+    console.log(parameters); // Add this to log the parameters array
+
+    // Now ensure that you are passing this `parameters` array in the data sent to the backend
+
+
+
+    // Collect auxiliaries for the selected shift section
+    const auxiliaries = [];
+    const auxDivs = shiftSection.querySelectorAll(".aux_status .form-item");
+
+    auxDivs.forEach(auxDiv => {
+      const auxName = auxDiv.querySelector("h4").textContent.trim();
+      const checkboxes = auxDiv.querySelectorAll("input[type='checkbox']:checked");
+
+      if (checkboxes.length > 0) {
+        const selectedOptions = [];
+        checkboxes.forEach(cb => selectedOptions.push(cb.nextSibling.textContent.trim().split(' ')[0])); // Extract "A", "B", etc.
+
+        // Find auxiliary ID from dataset
+        const auxiliaryId = auxDiv.dataset.auxid;
+
+        if (auxName && selectedOptions.length > 0) {
+          auxiliaries.push({
+            auxiliaryId: auxiliaryId,
+            auxiliaryName: auxName,
+            selectedOptions: selectedOptions
+          });
+        }
+      }
+    });
+
+
+    // Prepare the data for the current shift
+    const shiftData = {
+      section: selectedShift,
+      userId: userId,
+      unitId: unitId,
+      shiftId: shiftId,
+      shiftStartTime: shiftStartTime,
+      ...(parameters.length > 0 && { parameters: parameters }),
+      ...(auxiliaries.length > 0 && { inServiceAuxiliaries: auxiliaries })
+    };
+
+
+
+    // Step 2: POST to server (submit the current shift's data)
+    try {
+      const response = await fetch("/submit-section", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(shiftData) // Send only the data for the selected shift
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("Shift data submitted successfully!");
+      } else {
+        alert("Submission failed: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error submitting:", error);
+      alert("An error occurred while submitting the form.");
+    }
   });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </html>
