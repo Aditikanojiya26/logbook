@@ -4,14 +4,14 @@ const sceSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     unitId: { type: mongoose.Schema.Types.ObjectId, ref: "Unit", required: true },
     shiftId: { type: mongoose.Schema.Types.ObjectId, ref: "Shift", required: true },
-    timestamp: { type: Date, default: Date.now },
 
     shiftBeginning: {
         parameters: [
             {
                 name: { type: String },  // Parameter name
                 value: { type: String }  // Value entered by the user
-            }
+            },
+            
         ],
         inServiceAuxiliaries: [
             {
@@ -22,33 +22,30 @@ const sceSchema = new mongoose.Schema({
         ],
     },
 
-    shiftMid: {
-        parameters: [
+    midNight: {
+        type: {
+          parameters: [
             {
-                name: { type: String },  // Parameter name
-                value: { type: String }  // Value entered by the user
+              name: { type: String },
+              value: { type: String }
             }
-        ]
-    },
-
-    shiftEnd: {
-        parameters: [
+          ]
+        },
+        default: undefined
+      },
+      shiftEnd: {
+        type: {
+          parameters: [
             {
-                name: { type: String },  // Parameter name
-                value: { type: String }  // Value entered by the user
+              name: { type: String },
+              value: { type: String }
             }
-        ]
+          ]
+        },
+        default: undefined
+      }
+      ,
     
-    },
-    
-    midnight_details: {
-        parameters: [
-            {
-                name: { type: String },  // Parameter name
-                value: { type: String }  // Value entered by the user
-            }
-        ]
-    }
 }, { timestamps: true }); // Automatically adds createdAt & updatedAt
 
 module.exports = mongoose.model("SCE", sceSchema);

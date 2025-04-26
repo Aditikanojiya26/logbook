@@ -23,6 +23,11 @@ exports.getSCEData = async (req, res) => {
     if (!permission) {
       return res.status(403).json({ msg: "Access denied: No permission for this user." });
     }
+    const existingData = await Sce.findOne({
+      userId,
+      shiftId: permission.shiftId,
+      unitId: permission.unitId
+    });
     const parameterAuxiliaries = await ParameterAuxiliarySCE.find();
     const groupedParameterAux = {
       Beginning: [],

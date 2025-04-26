@@ -21,6 +21,7 @@ const auxiliarySchema = new mongoose.Schema(
 
     shiftTime: [
       {
+        
         type: String,
         enum: ["Beginning", "Mid", "End", "Midnight"],
       },
