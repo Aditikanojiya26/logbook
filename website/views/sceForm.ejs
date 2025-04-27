@@ -12,6 +12,7 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <link rel="stylesheet" href="form.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="SCe.css">
 
 </head>
 
@@ -41,122 +42,96 @@
       </select> -->
 
       <div id="shiftBeginning" class="shift-section hidden">
-        <div class="status_at_shift_beg mb-4">
-          <h1>Status At Shift Beginning</h1>
-          <!-- operational_details -->
-          <div class="operational_details">
-            <h1>Operational Details</h1>
-
-            <div class="form-grid">
-              <% parameters["Beginning"]["Operational Details"].forEach(param=> { %>
-                <div class="form-item">
-                  <label>
-                    <%= param.name %>
-                      <% if (param.unit) { %> (<%= param.unit %>) <% } %>
-                  </label>
-
-                  <% if (param.inputType==="text" ) { %>
-                    <input type="text" name="<%= param.name %>">
-
-                    <% } else if (param.inputType==="select" || param.inputType==="dropdown" ) { %>
-                      <select name="<%= param.name %>">
-                        <% param.options.forEach(opt=> { %>
-                          <option value="<%= opt %>">
-                            <%= opt %>
-                          </option>
-                          <% }) %>
+        <div class="card mb-4 p-3">
+          <div class="card-body">
+            <h2 class="card-title">Status At Shift Beginning</h2>
+      
+            <!-- Operational Details -->
+            <div class="card mb-3 p-3">
+              <h4>Operational Details</h4>
+              <div class="row">
+                <% parameters["Beginning"]["Operational Details"].forEach(param => { %>
+                  <div class="col-md-4 mb-3">
+                    <label><%= param.name %> <% if (param.unit) { %> (<%= param.unit %>) <% } %></label>
+                    <% if (param.inputType === "text" || param.inputType === "number" || param.inputType === "date" || param.inputType === "time") { %>
+                      <input 
+                        type="<%= param.inputType === 'number' ? 'number' : param.inputType === 'date' ? 'date' : param.inputType === 'time' ? 'time' : 'text' %>" 
+                        class="form-control" 
+                        name="<%= param.name %>"
+                      >
+                    <% } else if (param.inputType === "select" || param.inputType === "dropdown") { %>
+                      <select class="form-select" name="<%= param.name %>">
+                        <% param.options.forEach(opt => { %>
+                          <option value="<%= opt %>"><%= opt %></option>
+                        <% }) %>
                       </select>
-
-                      <% } else if (param.inputType==="date" ) { %>
-                        <input type="date" name="<%= param.name %>">
-
-                        <% } else if (param.inputType==="time" ) { %>
-                          <input type="time" name="<%= param.name %>">
-
-                          <% } else { %> <!-- Default to number input -->
-                            <input type="number" name="<%= param.name %>">
-                            <% } %>
-                </div>
+                    <% } %>
+                  </div>
                 <% }) %>
+              </div>
             </div>
-          </div>
-          <br>
-          <hr>
-
-          <!-- aux_status -->
-          <div class="aux_status">
-            <h2>Auxiliary Status</h2>
-
-            <% auxiliaries["Beginning"].forEach(aux=> { %>
-              <div class="form-item" data-auxid="<%= aux._id %>" data-auxname="<%= aux.name %>">
-                <h4>
-                  <%= aux.name %>
-                </h4>
-                <% aux.options.forEach(opt=> { %>
-                  <div class="checkbox-option">
-                    <% if (opt.status==="Ready" ) { %>
-                      <label>
-                        <input type="checkbox" name="<%= aux.name.replace(/\s+/g, '') %><%= opt.optionName %>"
-                          value="<%= opt.optionName %>">
-                        <%= opt.optionName %> (Ready)
-                      </label>
-                      <% } else { %>
-                        <span>
-                          <%= opt.optionName %>: <%= opt.status %>
-                        </span>
-                        <% } %>
+      
+            <!-- Auxiliary Status -->
+            <div class="card mb-3 p-3">
+              <h4>Auxiliary Status</h4>
+              <div class="row">
+                <% auxiliaries["Beginning"].forEach(aux => { %>
+                  <div class="col-md-6 mb-4">
+                    <div class="card p-3">
+                      <h5><%= aux.name %></h5>
+                      <div class="row">
+                        <% aux.options.forEach(opt => { %>
+                          <div class="col-6 mb-2">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" 
+                                name="<%= aux.name.replace(/\s+/g, '') %><%= opt.optionName %>" 
+                                value="<%= opt.optionName %>">
+                              <label class="form-check-label">
+                                <%= opt.optionName %> (<%= opt.status %>)
+                              </label>
+                            </div>
+                          </div>
+                        <% }) %>
+                      </div>
+                    </div>
                   </div>
-                  <% }) %>
+                <% }) %>
               </div>
-              <% }) %>
-          </div>
-        </div><br>
-        <hr>
-
-        <div class="important_params">
-          <h2>Important Parameters At Shift Beginning</h2>
-
-          <% const importantParams=parameters["Beginning"]["Important Parameters"]; %>
-            <% if (importantParams && importantParams.length> 0) { %>
-              <div class="form-grid">
-                <% importantParams.forEach(param=> { %>
-                  <div class="form-item">
-                    <label for="<%= param.name.replace(/\s+/g, '_') %>">
-                      <%= param.name %>
-                        <% if (param.unit) { %> (<%= param.unit %>) <% } %>
-
-                    </label>
-
-                    <% if (param.inputType==="number" ) { %>
-                      <input type="number" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
-                        placeholder="Enter value" />
-                      <% } else if (param.inputType==="text" ) { %>
-                        <input type="text" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>"
-                          placeholder="Enter value" />
-                        <% } else if (param.inputType==="select" ) { %>
-                          <select name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>">
-                            <% param.options.forEach(opt=> { %>
-                              <option value="<%= opt %>">
-                                <%= opt %>
-                              </option>
-                              <% }) %>
-                          </select>
-                          <% } else if (param.inputType==="date" ) { %>
-                            <input type="date" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
-                            <% } else if (param.inputType==="time" ) { %>
-                              <input type="time" name="<%= param.name %>" id="<%= param.name.replace(/\s+/g, '_') %>" />
-                              <% } %>
-                  </div>
+            </div>
+      
+            <!-- Important Parameters -->
+            <div class="card mb-3 p-3">
+              <h4>Important Parameters At Shift Beginning</h4>
+              <div class="row">
+                <% if (parameters["Beginning"]["Important Parameters"] && parameters["Beginning"]["Important Parameters"].length > 0) { %>
+                  <% parameters["Beginning"]["Important Parameters"].forEach(param => { %>
+                    <div class="col-md-4 mb-3">
+                      <label><%= param.name %> <% if (param.unit) { %> (<%= param.unit %>) <% } %></label>
+                      <% if (param.inputType === "text" || param.inputType === "number" || param.inputType === "date" || param.inputType === "time") { %>
+                        <input 
+                          type="<%= param.inputType === 'number' ? 'number' : param.inputType === 'date' ? 'date' : param.inputType === 'time' ? 'time' : 'text' %>" 
+                          class="form-control" 
+                          name="<%= param.name %>"
+                        >
+                      <% } else if (param.inputType === "select" || param.inputType === "dropdown") { %>
+                        <select class="form-select" name="<%= param.name %>">
+                          <% param.options.forEach(opt => { %>
+                            <option value="<%= opt %>"><%= opt %></option>
+                          <% }) %>
+                        </select>
+                      <% } %>
+                    </div>
                   <% }) %>
-              </div>
-              <% } else { %>
-                <p>No important parameters available.</p>
+                <% } else { %>
+                  <p>No important parameters available.</p>
                 <% } %>
-
+              </div>
+            </div>
+      
+          </div>
         </div>
-        <br>
-
       </div>
+      
 
       <div id="shiftEnd" class="shift-section hidden">
         <div class="Shift_End_Parameters">
@@ -198,75 +173,70 @@
         </div>
       </div>
 
-      <div id="shiftMid" class="shift-section hidden">
+      <div id="shiftMid" class="card shift-section hidden">
         <h2>Midnight - Shift End Parameters</h2>
         <% if (parameters.Midnight && parameters.Midnight["Shift End Parameters"]) { %>
-          <% parameters.Midnight["Shift End Parameters"].forEach(param=> { %>
+          <% parameters.Midnight["Shift End Parameters"].forEach(param => { %>
             <div class="form-group">
               <label for="<%= param.name.replace(/\s+/g, '_') %>">
                 <%= param.name %>
-                  <% if (param.unit) { %> (<%= param.unit %>) <% } %>
+                <% if (param.unit) { %> (<%= param.unit %>) <% } %>
               </label>
               <input type="<%= param.inputType || 'text' %>" name="midnight_<%= param.name.replace(/\s+/g, '_') %>"
                 id="<%= param.name.replace(/\s+/g, '_') %>" placeholder="Enter value" />
             </div>
+          <% }) %>
+        <% } else { %>
+          <p>No Shift End Parameters found for Midnight.</p>
+        <% } %>
+      
+        <% Object.keys(parameterAuxiliaries).forEach(shift => { %>
+          <% if (parameterAuxiliaries[shift].length > 0) { %>
+            <h2>Midnight Details</h2>
+            <% parameterAuxiliaries[shift].forEach(aux => { %>
+              <% if (aux.reading && aux.reading.length > 0) { %>
+                <table border="1" cellpadding="8" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <% aux.options.forEach(opt => { %>
+                        <th><%= opt.optionName %></th>
+                      <% }) %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% aux.reading.forEach(read => { %>
+                      <tr>
+                        <td><%= read.parameterName %></td>
+                        <% aux.options.forEach(opt => { %>
+                          <td>
+                            <input type="text"
+                              name="aux_<%= aux.name.replace(/\s+/g, '') %><%= read.parameterName.replace(/\s+/g, '') %><%= opt.optionName %>"
+                              placeholder="Enter value" />
+                          </td>
+                        <% }) %>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+                <br />
+              <% } %>
             <% }) %>
-              <% } else { %>
-                <p>No Shift End Parameters found for Midnight.</p>
-                <% } %>
-
-                  <% Object.keys(parameterAuxiliaries).forEach(shift=> { %>
-                    <% if (parameterAuxiliaries[shift].length> 0) { %>
-                      <h2>
-                        Midnight Details
-                      </h2>
-                      <% parameterAuxiliaries[shift].forEach(aux=> { %>
-                        <% if (aux.reading && aux.reading.length> 0) { %>
-                          <table border="1" cellpadding="8" cellspacing="0">
-                            <thead>
-                              <tr>
-                                <th>Parameter</th>
-                                <% aux.options.forEach(opt=> { %>
-                                  <th>
-                                    <%= opt.optionName %>
-                                  </th>
-                                  <% }) %>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <% aux.reading.forEach(read=> { %>
-                                <tr>
-                                  <td>
-                                    <%= read.parameterName %>
-                                  </td>
-                                  <% aux.options.forEach(opt=> { %>
-                                    <td>
-                                      <input type="text"
-                                        name="aux_<%= aux.name.replace(/\s+/g, '') %><%= read.parameterName.replace(/\s+/g, '') %><%= opt.optionName %>"
-                                        placeholder="Enter value" />
-                                    </td>
-                                    <% }) %>
-                                </tr>
-                                <% }) %>
-                            </tbody>
-                          </table>
-                          <br />
-                          <% } %>
-                            <% }) %>
-                              <% } %>
-                                <% }) %>
-
+          <% } %>
+        <% }) %>
       </div>
+      
 
       <button id="submitButton" type="submit">Submit</button>
     </form>
   </main>
-</body>
+</body> 
 <!-- inside views/page.ejs -->
 <script>
-  const permission = <%- JSON.stringify(permission) %>;
+  const permission = JSON.parse('<%= JSON.stringify(permission) %>');
   console.log("Permission from server:", permission);
 </script>
+
 
 <script>
 

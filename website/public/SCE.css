@@ -1,0 +1,328 @@
+@import url("./variable.css");
+
+/* =====================
+   Global Styles
+===================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+header {
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3, h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+/* Utility Classes */
+.mb-4 { margin-bottom: 1.5rem; }
+.mt-3 { margin-top: 1rem; }
+.py-4 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.rounded { border-radius: 4px; }
+.text-center { text-align: center !important; }
+.text-white { color: white !important; }
+.bg-secondary { background-color: #6c757d !important; }
+.hidden { display: none; }
+
+hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Reusable Card Component */
+.card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================
+   Form Layout
+===================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+}
+
+.form-item label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-item input[type="text"],
+.form-item input[type="number"],
+.form-item input[type="date"],
+.form-item input[type="time"],
+.form-item select,
+#shiftMid input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* =====================
+   Navigation Buttons
+===================== */
+.d-md-flex {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.shift-tab {
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 0 0.5rem;
+}
+
+.shift-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shift-tab.active {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* =====================
+   Submit Button
+===================== */
+#submitButton {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 2rem auto 0;
+  padding: 0.75rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#submitButton:hover {
+  background-color: #218838;
+}
+
+/* =====================
+   Auxiliary Status Section
+===================== */
+.aux_status {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.aux_status .form-item {
+  background-color: #f8f9fa;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.aux_status h4 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+.checkbox-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.checkbox-option {
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  flex: 1 0 calc(50% - 0.5rem);
+  box-sizing: border-box;
+  min-width: 120px;
+}
+
+.checkbox-option label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.checkbox-option input[type="checkbox"] {
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.checkbox-option span {
+  font-size: 0.9rem;
+  display: inline-block;
+  padding: 0.25rem 0;
+}
+
+/* =====================
+   Table Styling
+===================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  background-color: white;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+th {
+  background-color: #f1f1f1;
+  font-weight: 600;
+}
+
+/* =====================
+   Midnight Details Section (Same Style as Shifts)
+===================== */
+#shiftMid {
+  margin-top: 2rem;
+}
+
+#shiftMid .card {
+  width: 100%;
+}
+
+#shiftMid h2 {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+#shiftMid table {
+  table-layout: fixed;
+}
+
+#shiftMid th, #shiftMid td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  font-size: 0.95rem;
+}
+
+#shiftMid th {
+  background-color: #f1f1f1;
+  font-weight: 600;
+  color: #495057;
+}
+
+#shiftMid td {
+  background-color: white;
+}
+
+/* =====================
+   Responsive Design
+===================== */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .d-md-flex {
+    flex-direction: column;
+  }
+
+  .shift-tab {
+    margin: 0.25rem 0;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .aux_status {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-option {
+    flex: 1 0 100%;
+  }
+
+  #shiftMid th, #shiftMid td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  #shiftMid input[type="text"] {
+    padding: 0.3rem;
+    font-size: 0.85rem;
+  }
+}
