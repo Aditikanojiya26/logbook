@@ -4,7 +4,7 @@ const logbookFormsSchema = new mongoose.Schema(
   {
     unit: {
       type: String,
-      required: true
+      required: true,
     },
     role: {
       type: String,
@@ -26,6 +26,9 @@ const logbookFormsSchema = new mongoose.Schema(
               options: {
                 type: [String],
                 default: [],
+              },
+              unit_of_measurement: {
+                type: String,
               },
             },
           ],
@@ -50,6 +53,9 @@ const logbookFormsSchema = new mongoose.Schema(
                 type: [String],
                 default: [],
               },
+              unit_of_measurement: {
+                type: String,
+              },
             },
           ],
         },
@@ -73,6 +79,9 @@ const logbookFormsSchema = new mongoose.Schema(
                 type: [String],
                 default: [],
               },
+              unit_of_measurement: {
+                type: String,
+              },
             },
           ],
         },
@@ -95,6 +104,9 @@ const logbookFormsSchema = new mongoose.Schema(
               options: {
                 type: [String],
                 default: [],
+              },
+              unit_of_measurement: {
+                type: String,
               },
             },
           ],
