@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const sceRoutes = require("../backend/routes/sceRoutes");
 const adminRoutes = require("../backend/routes/adminRoutes");
+const logbookFormRoutes=require("../backend/routes/logbookFormRoutes")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -28,6 +29,7 @@ app.use("/", authRoutes);
 app.use("/", permissionRoutes);
 app.use("/", sceRoutes);
 app.use("/", shiftRoutes);
+app.use("/", logbookFormRoutes); 
 app.use("/admin", adminRoutes);
 // Start server
 app.listen(PORT, () => {

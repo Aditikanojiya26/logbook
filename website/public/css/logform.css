@@ -1,0 +1,94 @@
+
+@import url("../variable.css");
+/* public/styles/sce-form.css */
+
+
+/* Apply background gradient to body */
+body {
+  font-family: var(--font-family);
+  background: var(--background-gradient);
+  padding-top: 20px;
+}
+
+/* Container and form styling */
+.container {
+  background-color: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 30px;
+  border: 1px solid var(--card-border);
+}
+
+h1 {
+  color: var(--primary-color);
+}
+
+.nav-tabs .nav-link {
+  color: var(--primary-color);
+  background-color: #f8f9fa;
+  border-radius: .25rem;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--btn-color);
+  background-color: var(--btn-bg);
+  border-color: var(--btn-bg);
+}
+
+.form-control, .form-check-input, select, textarea {
+  border-radius: .5rem;
+}
+
+.form-control:focus, select:focus, textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background-color: var(--btn-bg);
+  border: none;
+  border-radius: .5rem;
+  color: var(--btn-color);
+  padding: 10px 20px;
+}
+
+.btn-primary:hover {
+  background-color: #1d2124;
+}
+
+fieldset {
+  border: 2px solid var(--card-border);
+  border-radius: .75rem;
+  padding: 15px;
+}
+
+legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.form-check-label {
+  color: var(--primary-color);
+}
+
+/* Adjust spacing between sections */
+.tab-content {
+  margin-top: 30px;
+}
+
+/* Style for form checkboxes */
+.form-check {
+  margin-left: 20px;
+}
+
+/* 3 Fields per row styling */
+.row .form-group {
+  margin-bottom: 1rem;
+}
+
+/* Custom grid for three fields in one row */
+.three-fields .form-group {
+  flex: 1 0 30%;
+  margin-right: 15px;
+}

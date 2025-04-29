@@ -41,13 +41,13 @@
         <option value="shiftEnd">Shift End</option>
       </select> -->
 
-      <div id="shiftBeginning" class="shift-section hidden">
-        <div class="card mb-4 p-3">
+      <div id="shiftBeginning" class="card shift-section hidden">
+        <div class=" mb-4 ">
           <div class="card-body">
             <h2 class="card-title">Status At Shift Beginning</h2>
       
             <!-- Operational Details -->
-            <div class="card mb-3 p-3">
+            <div class="mb-3 p-1">
               <h4>Operational Details</h4>
               <div class="row">
                 <% parameters["Beginning"]["Operational Details"].forEach(param => { %>
@@ -133,7 +133,7 @@
       </div>
       
 
-      <div id="shiftEnd" class="shift-section hidden">
+      <div id="shiftEnd" class="shift-section hidden card">
         <div class="Shift_End_Parameters">
 
 
@@ -233,7 +233,7 @@
 </body> 
 <!-- inside views/page.ejs -->
 <script>
-  const permission = JSON.parse('<%= JSON.stringify(permission) %>');
+  const permission = JSON.parse('<%- JSON.stringify(permission) %>');
   console.log("Permission from server:", permission);
 </script>
 
