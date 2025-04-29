@@ -1,29 +1,43 @@
 const express = require("express");
 const LogbookForm = require("../../models/logbookForms");
+const Units = require("../../models/unit");
+const Roles = require("../../models/designation");
 
 exports.showMasterForm = async (req, res) => {
-  return res.render("MasterForm");
+  const units = await Units.find();
+  const roles = await Roles.find();
+  return res.render("MasterForm", { units, roles });
 };
 
 exports.createMasterForm = async (req, res) => {
-//   const { unit, role, shiftBeg, shiftMid, shiftEnd, midnight } = req.body;
-//   console.log(req.body);
-//   try {
-//     const newForm = new LogbookForm({
-//       unit,
-//       role,
-//       sections: {
-//         shiftBeg,
-//         shiftMid,
-//         shiftEnd,
-//         midnight,
-//       },
-//     });
-//     console.log(newForm);
-//     await newForm.save();
-//     return res.status(201).json({ message: "Form created successfully!" });
-//   } catch (error) {
-//     console.error("Error creating master form:", error);
-//     return res.status(500).send("Error creating master form");
-//   }
+  try {
+    const form = req.body;
+    console.log(JSON.stringify(form, null, 2));
+
+    // Create new logbook form in the database
+    const newLogbookForm = new LogbookForm({
+      unit: form.unit,
+      role: form.role,
+      shiftBeg: form.shiftBeg,
+      shiftMid: form.shiftMid,
+      shiftEnd: form.shiftEnd,
+      midnight: form.midnight,
+    });
+
+    // Save the new logbook form to the database
+    const savedLogbookForm = await newLogbookForm.save();
+    console.log("Logbook form saved successfully:", savedLogbookForm);
+
+    // Respond with success message
+    res.status(200).json({
+      message: "Logbook form submitted successfully!",
+      data: savedLogbookForm,
+    });
+  } catch (error) {
+    console.error("Error submitting logbook form:", error);
+    res.status(500).json({
+      message: "Failed to submit logbook form",
+      error: error.message,
+    });
+  }
 };
