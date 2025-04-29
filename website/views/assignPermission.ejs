@@ -1,46 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Assign Permission</title>
+    <title>Assign Permissions</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/18841/18841791.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/asgper.css">
 </head>
+
 <body>
-    <h2>Assign Permission</h2>
-    <form action="/assign-permission" method="POST">
-        <label>Select User:</label>
-        <select name="userId">
-            <% users.forEach(user => { %>
-                <option value="<%= user._id %>"><%= user.name %></option>
-            <% }) %>
-        </select>
+    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <a class="heading" href="#">
+            <h3>Operational Members</h3>
+        </a>
+    </nav>
+    <div class="main-box">
+        <h2 class="asgper">Assign Permission</h2>
+        <form action="/assign-permission" method="POST">
+            <div class="mb-3">
+                <label>Select User:</label>
+                <select name="userId">
+                    <% users.forEach(user=> { %>
+                        <option value="<%= user._id %>">
+                            <%= user.name %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Select Shift:</label>
+                <select name="shiftId">
+                    <% shifts.forEach(shift=> { %>
+                        <option value="<%= shift._id %>">
+                            <%= shift.name %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Select Unit:</label>
+                <select name="unitId">
+                    <% units.forEach(unit=> { %>
+                        <option value="<%= unit._id %>">
+                            <%= unit.name %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
 
-        <label>Select Shift:</label>
-        <select name="shiftId">
-            <% shifts.forEach(shift => { %>
-                <option value="<%= shift._id %>"><%= shift.name %></option>
-            <% }) %>
-        </select>
-
-        <label>Select Unit:</label>
-        <select name="unitId">
-            <% units.forEach(unit => { %>
-                <option value="<%= unit._id %>"><%= unit.name %></option>
-            <% }) %>
-        </select>
-
-        <button type="submit">Grant Permission</button>
-    </form>
+            <button type="submit" class="btn btn-dark w-100">Grant Permission</button>
+        </form>
+    </div>
 </body>
 <script>
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-  
+
     if (token) {
-      // Save to localStorage or sessionStorage for use in future API calls
-      localStorage.setItem("authToken", token);
-      console.log("Token saved:", token);
+        // Save to localStorage or sessionStorage for use in future API calls
+        localStorage.setItem("authToken", token);
+        console.log("Token saved:", token);
     } else {
-      console.log("No token in URL");
+        console.log("No token in URL");
     }
-  </script>
-  
+</script>
+
 </html>
