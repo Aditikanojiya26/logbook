@@ -67,7 +67,6 @@ function addSection(shiftType) {
   container.insertAdjacentHTML("beforeend", sectionHTML);
 }
 
-// Field management
 function addField(shiftType, sectionIndex) {
   const fieldsContainer = document.getElementById(
     `${shiftType}-fields-${sectionIndex}`
@@ -75,47 +74,80 @@ function addField(shiftType, sectionIndex) {
   const fieldId = `${shiftType}-field-${sectionIndex}-${fieldsContainer.children.length}`;
 
   const fieldHTML = `
-      <div class="field-row row g-2 align-items-end mb-2" id="${fieldId}">
-        <div class="col-md-4">
-          <label class="form-label">Field Name</label>
-          <input type="text" 
-                 name="${shiftType}[section][${sectionIndex}][fields][][field_name]" 
-                 class="form-control" 
-                 required>
+    <div class="field-row row g-2 align-items-end mb-2" id="${fieldId}">
+      <!-- Existing Field Name and Field Type Inputs -->
+      <div class="col-md-4">
+        <label class="form-label">Field Name</label>
+        <input type="text" 
+               name="${shiftType}[section][${sectionIndex}][fields][][field_name]" 
+               class="form-control" 
+               required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Field Type</label>
+        <select name="${shiftType}[section][${sectionIndex}][fields][][field_type]" 
+                class="form-select" 
+                onchange="toggleOptionsField(this)">
+          ${Object.entries(FIELD_TYPES)
+            .map(
+              ([value, label]) => `<option value="${value}">${label}</option>`
+            )
+            .join("")}
+        </select>
+      </div>
+      <div class="col-md-4 options-field" style="display: none;">
+        <label class="form-label">Options (comma separated)</label>
+        <input type="text" 
+               name="${shiftType}[section][${sectionIndex}][fields][][options]" 
+               class="form-control">
+      </div>
+      <div class="col-md-1">
+        <button type="button" 
+                class="btn btn-danger" 
+                onclick="removeField('${fieldId}')"
+                aria-label="Remove field">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Unit of Measurement -->
+      <div class="col-md-12 mt-2">
+        <input type="checkbox" class="form-check-input" onchange="toggleUnitOfInput(this)">
+        <label class="form-check-label">Add Unit of Measurement?</label>
+        <input type="text" class="form-control mt-2 d-none" name="${shiftType}[section][${sectionIndex}][fields][][unit]" placeholder="e.g. °C, Bar">
+      </div>
+
+       <!-- Min/Max Range -->
+      <div class="col-md-12 mt-2">
+        <input type="checkbox" class="form-check-input" id="rangeToggle_${sectionIndex}_${
+    fieldsContainer.children.length
+  }" onchange="toggleRangeInputs(this)">
+        <label class="form-check-label" for="rangeToggle_${sectionIndex}_${
+    fieldsContainer.children.length
+  }">Add Min/Max Range?</label>
+      </div>
+      <div class="row mt-2 range-inputs d-none">
+        <div class="col-md-6">
+          <label class="form-label">Min Value</label>
+          <input type="number" class="form-control" name="${shiftType}[section][${sectionIndex}][fields][][min_value]" step="any">
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Field Type</label>
-          <select name="${shiftType}[section][${sectionIndex}][fields][][field_type]" 
-                  class="form-select" 
-                  onchange="toggleOptionsField(this)">
-            ${Object.entries(FIELD_TYPES)
-              .map(
-                ([value, label]) => `<option value="${value}">${label}</option>`
-              )
-              .join("")}
-          </select>
-        </div>
-        <div class="col-md-4 options-field" style="display: none;">
-          <label class="form-label">Options (comma separated)</label>
-          <input type="text" 
-                 name="${shiftType}[section][${sectionIndex}][fields][][options]" 
-                 class="form-control">
-        </div>
-        <div class="col-md-1">
-          <button type="button" 
-                  class="btn btn-danger" 
-                  onclick="removeField('${fieldId}')"
-                  aria-label="Remove field">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-        <div class="col-md-12 mt-2">
-          <input type="checkbox" class="form-check-input" onchange="toggleUnitOfInput(this)">
-          <label class="form-check-label">Add Unit of Measurement?</label>
-          <input type="text" class="form-control mt-2 d-none" name="${shiftType}[section][${sectionIndex}][fields][][unit]" placeholder="e.g. °C, Bar">
+        <div class="col-md-6">
+          <label class="form-label">Max Value</label>
+          <input type="number" class="form-control" name="${shiftType}[section][${sectionIndex}][fields][][max_value]" step="any">
         </div>
       </div>
-    `;
+      
+      <!-- Has Remarks -->
+      <div class="col-md-12 mt-2">
+        <input type="checkbox" class="form-check-input" name="${shiftType}[section][${sectionIndex}][fields][][has_remarks]" id="remarksCheckbox_${sectionIndex}_${
+    fieldsContainer.children.length
+  }">
+        <label class="form-check-label" for="remarksCheckbox_${sectionIndex}_${
+    fieldsContainer.children.length
+  }">Include Remarks Field?</label>
+      </div>
+    </div>
+  `;
 
   fieldsContainer.insertAdjacentHTML("beforeend", fieldHTML);
 }
@@ -150,6 +182,21 @@ function toggleUnitOfInput(checkbox) {
   }
 }
 
+function toggleRangeInputs(checkbox) {
+  const rangeInputs = checkbox
+    .closest(".field-row")
+    .querySelector(".range-inputs");
+  if (checkbox.checked) {
+    rangeInputs.classList.remove("d-none");
+  } else {
+    rangeInputs.classList.add("d-none");
+    // Optionally, clear the input values when hiding
+    rangeInputs
+      .querySelectorAll("input")
+      .forEach((input) => (input.value = ""));
+  }
+}
+
 //Submit Script
 async function submitForm(event) {
   event.preventDefault();
@@ -168,6 +215,9 @@ async function submitForm(event) {
     shiftMid: { section: [] },
     shiftEnd: { section: [] },
     midnight: { section: [] },
+    has_operational_performed_section: document.getElementById(
+      "operationPerformedToggle"
+    ).checked,
   };
 
   ["shiftBegin", "shiftMid", "shiftEnd", "midnight"].forEach((shiftType) => {
@@ -196,11 +246,33 @@ async function submitForm(event) {
         const unitInput = row.querySelector('input[name*="[unit]"]');
         const unit = unitCheckbox.checked && unitInput ? unitInput.value : ""; // Get unit if checkbox is checked
 
+        //Min/Max
+        const minInput = row.querySelector('input[name*="[min_value]"]');
+        const maxInput = row.querySelector('input[name*="[max_value]"]');
+
+        const min_value =
+          minInput && minInput.value !== ""
+            ? parseFloat(minInput.value)
+            : undefined;
+        const max_value =
+          maxInput && maxInput.value !== ""
+            ? parseFloat(maxInput.value)
+            : undefined;
+
+        //Has Remarks?
+        const remarksCheckbox = row.querySelector(
+          'input[name*="[has_remarks]"]'
+        );
+        const has_remarks = remarksCheckbox ? remarksCheckbox.checked : false; // true if checked, false if not
+
         fields.push({
           field_name: fieldName,
           field_type: fieldType,
           options: options,
           unit_of_measurement: unit,
+          min_value: min_value,
+          max_value: max_value,
+          has_remarks: has_remarks,
         });
       });
 

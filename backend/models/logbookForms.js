@@ -30,6 +30,11 @@ const logbookFormsSchema = new mongoose.Schema(
               unit_of_measurement: {
                 type: String,
               },
+              min_value: { type: Number },
+              max_value: { type: Number },
+              has_remarks: {
+                type: Boolean,
+              },
             },
           ],
         },
@@ -56,6 +61,11 @@ const logbookFormsSchema = new mongoose.Schema(
               unit_of_measurement: {
                 type: String,
               },
+              min_value: { type: Number },
+              max_value: { type: Number },
+              has_remarks: {
+                type: Boolean,
+              },
             },
           ],
         },
@@ -81,6 +91,11 @@ const logbookFormsSchema = new mongoose.Schema(
               },
               unit_of_measurement: {
                 type: String,
+              },
+              min_value: { type: Number },
+              max_value: { type: Number },
+              has_remarks: {
+                type: Boolean,
               },
             },
           ],
@@ -112,6 +127,10 @@ const logbookFormsSchema = new mongoose.Schema(
           ],
         },
       ],
+    },
+    has_operational_performed_section: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

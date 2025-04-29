@@ -22,6 +22,7 @@ exports.createMasterForm = async (req, res) => {
       shiftMid: form.shiftMid,
       shiftEnd: form.shiftEnd,
       midnight: form.midnight,
+      has_operational_performed_section: form.has_operational_performed_section,
     });
 
     // Save the new logbook form to the database
