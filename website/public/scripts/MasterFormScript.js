@@ -109,6 +109,11 @@ function addField(shiftType, sectionIndex) {
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
+        <div class="col-md-12 mt-2">
+          <input type="checkbox" class="form-check-input" onchange="toggleUnitOfInput(this)">
+          <label class="form-check-label">Add Unit of Measurement?</label>
+          <input type="text" class="form-control mt-2 d-none" name="${shiftType}[section][${sectionIndex}][fields][][unit]" placeholder="e.g. °C, Bar">
+        </div>
       </div>
     `;
 
@@ -132,6 +137,17 @@ function toggleOptionsField(selectElement) {
     selectElement.value === "select" || selectElement.value === "checkbox"
       ? "block"
       : "none";
+}
+
+function toggleUnitOfInput(checkbox) {
+  const unitInput = checkbox
+    .closest(".field-row")
+    .querySelector('input[name*="[unit]"]');
+  if (checkbox.checked) {
+    unitInput.classList.remove("d-none"); // Show unit input
+  } else {
+    unitInput.classList.add("d-none"); // Hide unit input
+  }
 }
 
 //Submit Script
@@ -159,20 +175,32 @@ async function submitForm(event) {
     const formattedSections = [];
 
     sections.forEach((sectionCard) => {
-      const sectionName = sectionCard.querySelector('input[name*="[section_name]"]').value;
+      const sectionName = sectionCard.querySelector(
+        'input[name*="[section_name]"]'
+      ).value;
       const fields = [];
 
       const fieldRows = sectionCard.querySelectorAll(".field-row");
       fieldRows.forEach((row) => {
-        const fieldName = row.querySelector('input[name*="[field_name]"]').value;
-        const fieldType = row.querySelector('select[name*="[field_type]"]').value;
+        const fieldName = row.querySelector(
+          'input[name*="[field_name]"]'
+        ).value;
+        const fieldType = row.querySelector(
+          'select[name*="[field_type]"]'
+        ).value;
         const optionsInput = row.querySelector('input[name*="[options]"]');
         const options = optionsInput ? optionsInput.value : "";
+
+        // Get the checkbox and input for the unit of measurement
+        const unitCheckbox = row.querySelector('input[type="checkbox"]');
+        const unitInput = row.querySelector('input[name*="[unit]"]');
+        const unit = unitCheckbox.checked && unitInput ? unitInput.value : ""; // Get unit if checkbox is checked
 
         fields.push({
           field_name: fieldName,
           field_type: fieldType,
           options: options,
+          unit_of_measurement: unit,
         });
       });
 
@@ -185,28 +213,25 @@ async function submitForm(event) {
     // Map to Mongoose field names
     if (shiftType === "shiftBegin")
       payload.shiftBeg.section = formattedSections;
-    if (shiftType === "shiftMid")
-      payload.shiftMid.section = formattedSections;
-    if (shiftType === "shiftEnd")
-      payload.shiftEnd.section = formattedSections;
-    if (shiftType === "midnight")
-      payload.midnight.section = formattedSections;
+    if (shiftType === "shiftMid") payload.shiftMid.section = formattedSections;
+    if (shiftType === "shiftEnd") payload.shiftEnd.section = formattedSections;
+    if (shiftType === "midnight") payload.midnight.section = formattedSections;
   });
 
   // Submit the payload to server using AJAX (jQuery)
   $.ajax({
-    url: '/admin/CreateForm',  // The URL to send the POST request to
-    type: 'POST',  // Method type
-    contentType: 'application/json',  // Tell the server we are sending JSON
-    data: JSON.stringify(payload),  // Convert the payload to a JSON string
-    success: function(response) {
+    url: "/admin/CreateForm", // The URL to send the POST request to
+    type: "POST", // Method type
+    contentType: "application/json", // Tell the server we are sending JSON
+    data: JSON.stringify(payload), // Convert the payload to a JSON string
+    success: function (response) {
       alert("Logbook form submitted successfully!");
       form.reset();
       location.reload(); // or redirect to another page
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       const errorData = JSON.parse(xhr.responseText);
       alert("Error: " + errorData.message);
-    }
+    },
   });
 }
