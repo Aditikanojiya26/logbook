@@ -58,62 +58,63 @@
                   <%= section.section_name %>
                 </legend>
                 <div class="row three-fields">
-                  <% section.fields.forEach((field, fieldIndex) => { %>
+                  <% section.fields.forEach((field, fieldIndex)=> { %>
                     <div class="form-group col-md-4">
                       <label for="<%= field.field_name %>">
                         <%= field.field_name %>
-                        <% if (field.unit_of_measurement) { %>
-                          (<%= field.unit_of_measurement %>)
-                        <% } %>
+                          <% if (field.unit_of_measurement) { %>
+                            (<%= field.unit_of_measurement %>)
+                              <% } %>
                       </label>
-                  
-                      <% if (['text', 'number', 'date', 'time'].includes(field.field_type)) { %>
+
+                      <% if (['text', 'number' , 'date' , 'time' ].includes(field.field_type)) { %>
                         <input type="<%= field.field_type %>" class="form-control"
                           name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
                           id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
                           max="<%= field.max_value || '' %>" />
-                      <% } else if (field.field_type === 'select') { %>
-                        <select class="form-control"
-                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
-                          <% const opts = field.options && field.options.length > 0
-                            ? field.options[0].split(',')
-                            : [];
-                          %>
-                          <% opts.forEach(opt => { %>
-                            <option value="<%= opt.trim() %>"><%= opt.trim() %></option>
-                          <% }) %>
-                        </select>
-                      <% } else if (field.field_type === 'checkbox') { %>
-                        <% const opts = field.options && field.options.length > 0
-                          ? field.options[0].split(',')
-                          : [];
-                        %>
-                        <% opts.forEach((opt, i) => { %>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                              name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
-                              value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
-                            <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
-                              <%= opt.trim() %>
-                            </label>
-                          </div>
-                        <% }) %>
-                      <% } %>
-                  
-                      <% if (field.has_remarks) { %>
-                        <textarea class="form-control mt-2"
-                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
-                          placeholder="Remarks"></textarea>
-                      <% } %>
-                  
-                      <!-- Add hidden input for field_id (MongoDB generated _id) -->
-                      <input type="hidden" name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][field_id]" value="<%= field._id %>" />
+                        <% } else if (field.field_type==='select' ) { %>
+                          <select class="form-control"
+                            name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
+                            <% const opts=field.options || []; %>
+                              <% opts.forEach(opt=> { %>
+                                <option value="<%= opt.trim() %>">
+                                  <%= opt.trim() %>
+                                </option>
+                                <% }); %>
+
+                          </select>
+                          <% } else if (field.field_type==='checkbox' ) { %>
+                            <% const opts=field.options || []; %>
+                              <% opts.forEach((opt, i)=> { %>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox"
+                                    name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
+                                    value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
+                                  <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
+                                    <%= opt.trim() %>
+                                  </label>
+                                </div>
+                                <% }); %>
+
+                                  <% } %>
+
+                                    <% if (field.has_remarks) { %>
+                                      <textarea class="form-control mt-2"
+                                        name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
+                                        placeholder="Remarks"></textarea>
+                                      <% } %>
+
+                                        <!-- Add hidden input for field_id (MongoDB generated _id) -->
+                                        <input type="hidden"
+                                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][field_id]"
+                                          value="<%= field._id %>" />
                     </div>
-                  <% }) %>
-                  
-                  <!-- Add hidden input for section_id (MongoDB generated _id) -->
-                  <input type="hidden" name="<%= shift %>[<%= section.section_name %>][section_id]" value="<%= section._id %>" />
-                  
+                    <% }) %>
+
+                      <!-- Add hidden input for section_id (MongoDB generated _id) -->
+                      <input type="hidden" name="<%= shift %>[<%= section.section_name %>][section_id]"
+                        value="<%= section._id %>" />
+
                 </div>
               </fieldset>
               <% }) %>
