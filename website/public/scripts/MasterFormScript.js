@@ -239,7 +239,9 @@ async function submitForm(event) {
           'select[name*="[field_type]"]'
         ).value;
         const optionsInput = row.querySelector('input[name*="[options]"]');
-        const options = optionsInput ? optionsInput.value : "";
+        const options = optionsInput && optionsInput.value
+  ? optionsInput.value.split(",").map(opt => opt.trim()).filter(opt => opt !== "")
+  : [];
 
         // Get the checkbox and input for the unit of measurement
         const unitCheckbox = row.querySelector('input[type="checkbox"]');

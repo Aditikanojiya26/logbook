@@ -58,57 +58,62 @@
                   <%= section.section_name %>
                 </legend>
                 <div class="row three-fields">
-                  <% section.fields.forEach((field, fieldIndex)=> { %>
+                  <% section.fields.forEach((field, fieldIndex) => { %>
                     <div class="form-group col-md-4">
                       <label for="<%= field.field_name %>">
                         <%= field.field_name %>
-                          <% if (field.unit_of_measurement) { %>
-                            (<%= field.unit_of_measurement %>)
-                              <% } %>
+                        <% if (field.unit_of_measurement) { %>
+                          (<%= field.unit_of_measurement %>)
+                        <% } %>
                       </label>
-
-                      <% if (['text', 'number' , 'date' , 'time' ].includes(field.field_type)) { %>
+                  
+                      <% if (['text', 'number', 'date', 'time'].includes(field.field_type)) { %>
                         <input type="<%= field.field_type %>" class="form-control"
                           name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
                           id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
                           max="<%= field.max_value || '' %>" />
-                        <% } else if (field.field_type==='select' ) { %>
-                          <% const opts=(field.options && field.options.length> 0)
+                      <% } else if (field.field_type === 'select') { %>
+                        <select class="form-control"
+                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
+                          <% const opts = field.options && field.options.length > 0
                             ? field.options[0].split(',')
                             : [];
-                            %>
-                            <select class="form-control"
-                              name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
-                              <% opts.forEach(opt=> { %>
-                                <option value="<%= opt.trim() %>">
-                                  <%= opt.trim() %>
-                                </option>
-                                <% }) %>
-                            </select>
-                            <% } else if (field.field_type==='checkbox' ) { %>
-                              <% const opts=(field.options && field.options.length> 0)
-                                ? field.options[0].split(',')
-                                : [];
-                                %>
-                                <% opts.forEach((opt, i)=> { %>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                      name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
-                                      value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
-                                    <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
-                                      <%= opt.trim() %>
-                                    </label>
-                                  </div>
-                                  <% }) %>
-                                    <% } %>
-
-                                      <% if (field.has_remarks) { %>
-                                        <textarea class="form-control mt-2"
-                                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
-                                          placeholder="Remarks"></textarea>
-                                        <% } %>
+                          %>
+                          <% opts.forEach(opt => { %>
+                            <option value="<%= opt.trim() %>"><%= opt.trim() %></option>
+                          <% }) %>
+                        </select>
+                      <% } else if (field.field_type === 'checkbox') { %>
+                        <% const opts = field.options && field.options.length > 0
+                          ? field.options[0].split(',')
+                          : [];
+                        %>
+                        <% opts.forEach((opt, i) => { %>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                              name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
+                              value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
+                            <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
+                              <%= opt.trim() %>
+                            </label>
+                          </div>
+                        <% }) %>
+                      <% } %>
+                  
+                      <% if (field.has_remarks) { %>
+                        <textarea class="form-control mt-2"
+                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
+                          placeholder="Remarks"></textarea>
+                      <% } %>
+                  
+                      <!-- Add hidden input for field_id (MongoDB generated _id) -->
+                      <input type="hidden" name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][field_id]" value="<%= field._id %>" />
                     </div>
-                    <% }) %>
+                  <% }) %>
+                  
+                  <!-- Add hidden input for section_id (MongoDB generated _id) -->
+                  <input type="hidden" name="<%= shift %>[<%= section.section_name %>][section_id]" value="<%= section._id %>" />
+                  
                 </div>
               </fieldset>
               <% }) %>
@@ -119,12 +124,16 @@
                 <div class="tab-pane fade" id="operational" role="tabpanel" aria-labelledby="operational-tab">
                   <fieldset class="border p-3 my-3">
                     <legend class="w-auto">Operational Performed</legend>
+                    <input type="hidden" name="is_operational_only" value="true" />
+
                     <div id="operational-rows">
                       <div class="form-row mb-2">
                         <div class="col-md-4">
+                          <label for="operational_time_0">Time</label>
                           <input type="time" name="operational_details[0][time]" class="form-control" required />
                         </div>
                         <div class="col-md-8">
+                          <label for="operational_description_0">Description</label>
                           <input type="text" name="operational_details[0][description]" class="form-control"
                             placeholder="Enter description" required />
                         </div>
