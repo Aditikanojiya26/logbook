@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,129 +8,161 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/logform.css">
-<link rel="stylesheet" href="/css/variable.css">
+  <link rel="stylesheet" href="/css/logform.css">
+  <link rel="stylesheet" href="/css/variable.css">
 
- 
+
 </head>
+
 <body>
-  <div class="container mt-5">
-    <h1 class="mb-4">Unit-<%= form.unit %> | Logbook Form | Role: <%= form.role %></h1>
-    
+  <div class="container mt-3">
+    <h1 class="mb-4">Unit-<%= form.unit %> | Logbook Form | Role: <%= form.role %>
+    </h1>
+
     <!-- Nav Tabs for Shift Sections -->
     <ul class="nav nav-tabs" id="logbookTabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab" aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
+        <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab"
+          aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid" aria-selected="false">Shift Mid</a>
+        <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid"
+          aria-selected="false">Shift Mid</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd" aria-selected="false">Shift End</a>
+        <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd"
+          aria-selected="false">Shift End</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight" aria-selected="false">Midnight</a>
+        <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight"
+          aria-selected="false">Midnight</a>
       </li>
       <% if (form.has_operational_performed_section) { %>
         <li class="nav-item">
-          <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab" aria-controls="operational" aria-selected="false">Operational Performed</a>
+          <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab"
+            aria-controls="operational" aria-selected="false">Operational Performed</a>
         </li>
-      <% } %>
+        <% } %>
     </ul>
 
     <!-- Tab Content -->
     <div class="tab-content" id="logbookTabsContent">
-      <% ['shiftBeg', 'shiftMid', 'shiftEnd', 'midnight'].forEach(shift => { %>
-        <% if (form[shift] && form[shift].section.length > 0) { %>
-          <div class="tab-pane fade <%= shift === 'shiftBeg' ? 'show active' : '' %>" id="<%= shift %>" role="tabpanel" aria-labelledby="<%= shift %>-tab">
-            
-            <% form[shift].section.forEach(section => { %>
+      <% ['shiftBeg', 'shiftMid' , 'shiftEnd' , 'midnight' ].forEach(shift=> { %>
+        <% if (form[shift] && form[shift].section.length> 0) { %>
+          <div class="tab-pane fade <%= shift === 'shiftBeg' ? 'show active' : '' %>" id="<%= shift %>" role="tabpanel"
+            aria-labelledby="<%= shift %>-tab">
+
+            <% form[shift].section.forEach(section=> { %>
               <fieldset class="border p-3 my-2">
-                <legend class="w-auto"><%= section.section_name %></legend>
+                <legend class="w-auto">
+                  <%= section.section_name %>
+                </legend>
                 <div class="row three-fields">
-                  <% section.fields.forEach((field, fieldIndex) => { %>
+                  <% section.fields.forEach((field, fieldIndex)=> { %>
                     <div class="form-group col-md-4">
-                      <label for="<%= field.field_name %>"><%= field.field_name %> 
-                        <% if (field.unit_of_measurement) { %>
-                          (<%= field.unit_of_measurement %>)
-                        <% } %>
+                      <label for="<%= field.field_name %>">
+                        <%= field.field_name %>
+                          <% if (field.unit_of_measurement) { %>
+                            (<%= field.unit_of_measurement %>)
+                              <% } %>
                       </label>
 
-                      <% if (['text', 'number', 'date', 'time'].includes(field.field_type)) { %>
-                        <input type="<%= field.field_type %>" class="form-control" 
-                               name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]" 
-                               id="<%= field.field_name %>" 
-                               min="<%= field.min_value || '' %>" 
-                               max="<%= field.max_value || '' %>" />
-                      <% } else if (field.field_type === 'select') { %>
-                        <% 
-                          const opts = (field.options && field.options.length > 0) 
-                                       ? field.options[0].split(',') 
-                                       : []; 
-                        %>
-                        <select class="form-control" name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
-                          <% opts.forEach(opt => { %>
-                            <option value="<%= opt.trim() %>"><%= opt.trim() %></option>
-                          <% }) %>
-                        </select>
-                      <% } else if (field.field_type === 'checkbox') { %>
-                        <% 
-                          const opts = (field.options && field.options.length > 0) 
-                                       ? field.options[0].split(',') 
-                                       : []; 
-                        %>
-                        <% opts.forEach((opt, i) => { %>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
-                                   name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]" 
-                                   value="<%= opt.trim() %>" 
-                                   id="<%= field.field_name %>_<%= i %>" />
-                            <label class="form-check-label" for="<%= field.field_name %>_<%= i %>"><%= opt.trim() %></label>
-                          </div>
-                        <% }) %>
-                      <% } %>
+                      <% if (['text', 'number' , 'date' , 'time' ].includes(field.field_type)) { %>
+                        <input type="<%= field.field_type %>" class="form-control"
+                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
+                          id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
+                          max="<%= field.max_value || '' %>" />
+                        <% } else if (field.field_type==='select' ) { %>
+                          <% const opts=(field.options && field.options.length> 0)
+                            ? field.options[0].split(',')
+                            : [];
+                            %>
+                            <select class="form-control"
+                              name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
+                              <% opts.forEach(opt=> { %>
+                                <option value="<%= opt.trim() %>">
+                                  <%= opt.trim() %>
+                                </option>
+                                <% }) %>
+                            </select>
+                            <% } else if (field.field_type==='checkbox' ) { %>
+                              <% const opts=(field.options && field.options.length> 0)
+                                ? field.options[0].split(',')
+                                : [];
+                                %>
+                                <% opts.forEach((opt, i)=> { %>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                      name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
+                                      value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
+                                    <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
+                                      <%= opt.trim() %>
+                                    </label>
+                                  </div>
+                                  <% }) %>
+                                    <% } %>
 
-                      <% if (field.has_remarks) { %>
-                        <textarea class="form-control mt-2" name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]" placeholder="Remarks"></textarea>
-                      <% } %>
+                                      <% if (field.has_remarks) { %>
+                                        <textarea class="form-control mt-2"
+                                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
+                                          placeholder="Remarks"></textarea>
+                                        <% } %>
                     </div>
-                  <% }) %>
+                    <% }) %>
                 </div>
               </fieldset>
-            <% }) %>
+              <% }) %>
           </div>
-        <% } %>
-      <% }) %>
-      <% if (form.has_operational_performed_section) { %>
-        <div class="tab-pane fade" id="operational" role="tabpanel" aria-labelledby="operational-tab">
-          <fieldset class="border p-3 my-3">
-            <legend class="w-auto">Operational Performed</legend>
-            <div id="operational-rows">
-                <div class="form-row mb-2">
-                  <div class="col-md-4">
-                    <input type="time" name="operational_details[0][time]" class="form-control" required />
-                  </div>
-                  <div class="col-md-8">
-                    <input type="text" name="operational_details[0][description]" class="form-control" placeholder="Enter description" required />
-                  </div>
-                </div>
-              </div>
-             
-              
-            <button type="button" class="btn btn-secondary mt-2" onclick="addOperationalRow()">Add More</button>
-           
-          </fieldset>
-        </div>
-      <% } %>
-    </div>
-    
-      
+          <% } %>
+            <% }) %>
+              <% if (form.has_operational_performed_section) { %>
+                <div class="tab-pane fade" id="operational" role="tabpanel" aria-labelledby="operational-tab">
+                  <fieldset class="border p-3 my-3">
+                    <legend class="w-auto">Operational Performed</legend>
+                    <div id="operational-rows">
+                      <div class="form-row mb-2">
+                        <div class="col-md-4">
+                          <input type="time" name="operational_details[0][time]" class="form-control" required />
+                        </div>
+                        <div class="col-md-8">
+                          <input type="text" name="operational_details[0][description]" class="form-control"
+                            placeholder="Enter description" required />
+                        </div>
+                      </div>
+                    </div>
 
+
+                    <button type="button" class="btn btn-secondary mt-2" onclick="addOperationalRow()">Add More</button>
+
+                  </fieldset>
+                </div>
+                <% } %>
+    </div>
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
   </div>
   <script>
+    //Date & Time
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+      document.getElementById("date").value = today;
+      document.getElementById("date").min = today;  // Optional: Set min to today
+      document.getElementById("date").max = today;  // Optional: Set max to today
+
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const currentTime = `${hours}:${minutes}`;
+
+      const timeInput = document.getElementById("time");
+      timeInput.value = currentTime;
+
+      // Optional: restrict selection to current time only
+      timeInput.min = currentTime;
+      timeInput.max = currentTime;
+    });
+
     let operationalIndex = 1; // Start from 1 since 0 is already present
-  
+
     function addOperationalRow() {
       const container = $('#operational-rows'); // jQuery selector for the container
       const row = $(`
@@ -145,26 +178,27 @@
           </div>
         </div>
       `);
-      
+
       container.append(row); // Append the new row to the container
       operationalIndex++;
-  
+
       // Attach click event for the "Remove" button
-      row.find('button').click(function() {
+      row.find('button').click(function () {
         removeOperationalRow($(this)); // Pass the button element to the remove function
       });
     }
-  
+
     function removeOperationalRow(button) {
       button.closest('.form-row').remove(); // jQuery method to remove the row
     }
   </script>
-  
-  
+
+
 
   <!-- Bootstrap JS and dependencies -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

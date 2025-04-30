@@ -4,10 +4,20 @@
 
 
 /* Apply background gradient to body */
+html, body {
+  min-height: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: var(--font-family);
   background: var(--background-gradient);
-  padding-top: 20px;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 50px;
 }
 
 /* Container and form styling */
