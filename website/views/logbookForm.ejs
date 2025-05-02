@@ -8,13 +8,14 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/logform.css">
-  <link rel="stylesheet" href="/css/variable.css">
+  <link rel="stylesheet" href="/logform.css">
+ 
 
 
 </head>
 
 <body>
+  <form action="/submit" method="POST">
   <div class="container mt-3">
     <h1 class="mb-4">Unit-<%= form.unit %> | Logbook Form | Role: <%= form.role %>
     </h1>
@@ -44,112 +45,121 @@
         </li>
         <% } %>
     </ul>
+    
+      <!-- Tab Content -->
+      <div class="tab-content" id="logbookTabsContent">
+        <% ['shiftBeg', 'shiftMid' , 'shiftEnd' , 'midnight' ].forEach(shift=> { %>
 
-    <!-- Tab Content -->
-    <div class="tab-content" id="logbookTabsContent">
-      <% ['shiftBeg', 'shiftMid' , 'shiftEnd' , 'midnight' ].forEach(shift=> { %>
-        <% if (form[shift] && form[shift].section.length> 0) { %>
-          <div class="tab-pane fade <%= shift === 'shiftBeg' ? 'show active' : '' %>" id="<%= shift %>" role="tabpanel"
-            aria-labelledby="<%= shift %>-tab">
+          <% if (form[shift] && form[shift].section.length> 0) { %>
+            <div class="tab-pane fade <%= shift === 'shiftBeg' ? 'show active' : '' %>" id="<%= shift %>"
+              role="tabpanel" aria-labelledby="<%= shift %>-tab">
 
-            <% form[shift].section.forEach(section=> { %>
-              <fieldset class="border p-3 my-2">
-                <legend class="w-auto">
-                  <%= section.section_name %>
-                </legend>
-                <div class="row three-fields">
-                  <% section.fields.forEach((field, fieldIndex)=> { %>
-                    <div class="form-group col-md-4">
-                      <label for="<%= field.field_name %>">
-                        <%= field.field_name %>
-                          <% if (field.unit_of_measurement) { %>
-                            (<%= field.unit_of_measurement %>)
-                              <% } %>
-                      </label>
+              <% form[shift].section.forEach(section=> { %>
+                <fieldset class="border p-3 my-2">
+                  <legend class="w-auto">
+                    <%= section.section_name %>
+                  </legend>
+                  <div class="row three-fields">
+                    <% section.fields.forEach((field, fieldIndex)=> { %>
+                      <div class="form-group col-md-4">
+                        <label for="<%= field.field_name %>">
+                          <%= field.field_name %>
+                            <% if (field.unit_of_measurement) { %>
+                              (<%= field.unit_of_measurement %>)
+                                <% } %>
+                        </label>
 
-                      <% if (['text', 'number' , 'date' , 'time' ].includes(field.field_type)) { %>
-                        <input type="<%= field.field_type %>" class="form-control"
-                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
-                          id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
-                          max="<%= field.max_value || '' %>" />
-                        <% } else if (field.field_type==='select' ) { %>
-                          <select class="form-control"
-                            name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
-                            <% const opts=field.options || []; %>
-                              <% opts.forEach(opt=> { %>
-                                <option value="<%= opt.trim() %>">
-                                  <%= opt.trim() %>
-                                </option>
-                                <% }); %>
-
-                          </select>
-                          <% } else if (field.field_type==='checkbox' ) { %>
-                            <% const opts=field.options || []; %>
-                              <% opts.forEach((opt, i)=> { %>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="checkbox"
-                                    name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
-                                    value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
-                                  <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
+                        <% if (['text', 'number' , 'date' , 'time' ].includes(field.field_type)) { %>
+                          <input type="<%= field.field_type %>" class="form-control"
+                            name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
+                            id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
+                            max="<%= field.max_value || '' %>" />
+                          <% } else if (field.field_type==='select' ) { %>
+                            <select class="form-control"
+                              name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
+                              <% const opts=field.options || []; %>
+                                <% opts.forEach(opt=> { %>
+                                  <option value="<%= opt.trim() %>">
                                     <%= opt.trim() %>
-                                  </label>
-                                </div>
-                                <% }); %>
+                                  </option>
+                                  <% }); %>
 
-                                  <% } %>
+                            </select>
+                            <% } else if (field.field_type==='checkbox' ) { %>
+                              <% const opts=field.options || []; %>
+                                <% opts.forEach((opt, i)=> { %>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                      name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
+                                      value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
+                                    <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
+                                      <%= opt.trim() %>
+                                    </label>
+                                  </div>
+                                  <% }); %>
 
-                                    <% if (field.has_remarks) { %>
-                                      <textarea class="form-control mt-2"
-                                        name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
-                                        placeholder="Remarks"></textarea>
-                                      <% } %>
+                                    <% } %>
 
-                                        <!-- Add hidden input for field_id (MongoDB generated _id) -->
-                                        <input type="hidden"
-                                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][field_id]"
-                                          value="<%= field._id %>" />
-                    </div>
-                    <% }) %>
+                                      <% if (field.has_remarks) { %>
+                                        <textarea class="form-control mt-2"
+                                          name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>_remarks]"
+                                          placeholder="Remarks"></textarea>
+                                        <% } %>
 
-                      <!-- Add hidden input for section_id (MongoDB generated _id) -->
-                      <input type="hidden" name="<%= shift %>[<%= section.section_name %>][section_id]"
-                        value="<%= section._id %>" />
+                                          <!-- Add hidden input for field_id (MongoDB generated _id) -->
+                                          <input type="hidden" name="fieldIds[]" value="<%= field._id %>">
+                                          
+                      </div>
+                      <% }) %>
 
-                </div>
-              </fieldset>
+                        <!-- Add hidden input for section_id (MongoDB generated _id) -->
+                        <input type="hidden" name="sectionIds[]" value="<%= section._id %>">
+
+                  </div>
+                </fieldset>
+                <% }) %>
+            </div>
+            <% } %>
               <% }) %>
-          </div>
-          <% } %>
-            <% }) %>
-              <% if (form.has_operational_performed_section) { %>
-                <div class="tab-pane fade" id="operational" role="tabpanel" aria-labelledby="operational-tab">
-                  <fieldset class="border p-3 my-3">
-                    <legend class="w-auto">Operational Performed</legend>
-                    <input type="hidden" name="is_operational_only" value="true" />
+                <% if (form.has_operational_performed_section) { %>
+                  <div class="tab-pane fade" id="operational" role="tabpanel" aria-labelledby="operational-tab">
+                    <fieldset class="border p-3 my-3">
+                      <legend class="w-auto">Operational Performed</legend>
+                      <input type="hidden" name="is_operational_only" value="true" />
 
-                    <div id="operational-rows">
-                      <div class="form-row mb-2">
-                        <div class="col-md-4">
-                          <label for="operational_time_0">Time</label>
-                          <input type="time" name="operational_details[0][time]" class="form-control" required />
-                        </div>
-                        <div class="col-md-8">
-                          <label for="operational_description_0">Description</label>
-                          <input type="text" name="operational_details[0][description]" class="form-control"
-                            placeholder="Enter description" required />
+                      <div id="operational-rows">
+                        <div class="form-row mb-2">
+                          <div class="col-md-4">
+                            <label for="operational_time_0">Time</label>
+                            <input type="time" name="operational_details[0][time]" class="form-control"  />
+                          </div>
+                          <div class="col-md-8">
+                            <label for="operational_description_0">Description</label>
+                            <input type="text" name="operational_details[0][description]" class="form-control"
+                              placeholder="Enter description"  />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
 
-                    <button type="button" class="btn btn-secondary mt-2" onclick="addOperationalRow()">Add More</button>
+                      <button type="button" class="btn btn-secondary mt-2" onclick="addOperationalRow()">Add
+                        More</button>
 
-                  </fieldset>
-                </div>
-                <% } %>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    </fieldset>
+                  </div>
+                  <% } %>
+      </div>
+     
+
+      <input type="hidden" name="userId" value="<%= permission.userId %>">
+      <input type="hidden" name="shiftId" value="<%= permission.shiftId %>">
+      
+      <input type="hidden" name="role" value="<%= form.role %>">
+      
+      
   </div>
+  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
   <script>
     //Date & Time
     document.addEventListener("DOMContentLoaded", () => {
@@ -202,9 +212,6 @@
       button.closest('.form-row').remove(); // jQuery method to remove the row
     }
   </script>
-
-
-
   <!-- Bootstrap JS and dependencies -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

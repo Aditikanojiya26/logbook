@@ -41,7 +41,9 @@ exports.login = async (req, res) => {
 
     if (req.headers.accept?.includes("text/html")) {
       if (user.role === "PDE") return res.redirect("/assign-permission");
-      if (user.role === "SCE") return res.redirect("/SCEForm");
+      if (user.role === "SCE") {
+        return res.redirect(`/logbookform/${user.role}`);
+      }
       return res.redirect("/user-dashboard");
     }
 
