@@ -19,31 +19,26 @@
   <div class="container mt-3">
     <h1 class="mb-4">Unit-<%= form.unit %> | Logbook Form | Role: <%= form.role %>
     </h1>
-
+    <input type="hidden" name="selectedShiftPhase" id="selectedShiftPhase">
     <!-- Nav Tabs for Shift Sections -->
     <ul class="nav nav-tabs" id="logbookTabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab"
-          aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
+        <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab" aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid"
-          aria-selected="false">Shift Mid</a>
+        <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid" aria-selected="false">Shift Mid</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd"
-          aria-selected="false">Shift End</a>
+        <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd" aria-selected="false">Shift End</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight"
-          aria-selected="false">Midnight</a>
+        <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight" aria-selected="false">Midnight</a>
       </li>
       <% if (form.has_operational_performed_section) { %>
-        <li class="nav-item">
-          <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab"
-            aria-controls="operational" aria-selected="false">Operational Performed</a>
-        </li>
-        <% } %>
+      <li class="nav-item">
+        <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab" aria-controls="operational" aria-selected="false">Operational Performed</a>
+      </li>
+      <% } %>
     </ul>
     
       <!-- Tab Content -->
@@ -160,6 +155,9 @@
   </div>
   <button type="submit" class="btn btn-primary mt-3">Submit</button>
   </form>
+  <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
     //Date & Time
     document.addEventListener("DOMContentLoaded", () => {
@@ -211,9 +209,68 @@
     function removeOperationalRow(button) {
       button.closest('.form-row').remove(); // jQuery method to remove the row
     }
+   
+  // Add event listeners to each tab to update the hidden input field with the selected shift phase
+  $('#logbookTabs a').on('click', function() {
+    const selectedTab = $(this).attr('id');
+    let selectedShiftPhase = '';
+
+    // Map the tab IDs to the corresponding shift phase
+    switch (selectedTab) {
+      case 'shiftBeg-tab':
+        selectedShiftPhase = 'shiftBeg';
+        break;
+      case 'shiftMid-tab':
+        selectedShiftPhase = 'shiftMid';
+        break;
+      case 'shiftEnd-tab':
+        selectedShiftPhase = 'shiftEnd';
+        break;
+      case 'midnight-tab':
+        selectedShiftPhase = 'midnight';
+        break;
+      case 'operational-tab':
+        selectedShiftPhase = 'operational performed';
+        break;
+      default:
+        selectedShiftPhase = 'shiftBeg'; // Default to shiftBeg if none is selected
+    }
+
+    // Set the value of the hidden input field to the selected shift phase
+    $('#selectedShiftPhase').val(selectedShiftPhase);
+  });
+
+  // Initialize the hidden input with the initial selected phase (if necessary)
+  $(document).ready(function() {
+    const initialTab = $('#logbookTabs .nav-link.active').attr('id');
+    let initialShiftPhase = '';
+
+    switch (initialTab) {
+      case 'shiftBeg-tab':
+        initialShiftPhase = 'shiftBeg';
+        break;
+      case 'shiftMid-tab':
+        initialShiftPhase = 'shiftMid';
+        break;
+      case 'shiftEnd-tab':
+        initialShiftPhase = 'shiftEnd';
+        break;
+      case 'midnight-tab':
+        initialShiftPhase = 'midnight';
+        break;
+      case 'operational-tab':
+        initialShiftPhase = 'operational';
+        break;
+    }
+
+    // Set the value of the hidden input field to the initial shift phase
+    $('#selectedShiftPhase').val(initialShiftPhase);
+  });
+</script>
+
   </script>
   <!-- Bootstrap JS and dependencies -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

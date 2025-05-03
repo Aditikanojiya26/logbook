@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const logbookFormsSchema = new mongoose.Schema(
   {
     unit: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Unit", 
       required: true,
     },
     role: {

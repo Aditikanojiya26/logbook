@@ -9,6 +9,8 @@ const getFormByRole = async (req, res) => {
       return res.status(400).json({ error: 'User not authenticated or userId is missing' });
     }
     const form = await LogbookForm.findOne({ role });
+    
+
     const userId = req.user.userId;
     const permission = await Permission.findOne({ userId });
    
@@ -34,69 +36,77 @@ const getFormByRole = async (req, res) => {
 
 const submitLogbook = async (req, res) => {
   try {
-    const { userId, role, shiftId, is_operational_only, operational_details, fieldIds, sectionIds } = req.body;
-    
-    const shiftPhases = ['shiftBeg', 'shiftMid', 'shiftEnd', 'midnight'];
-    const sections = [];
-    let detectedShiftPhase = null;
-    
-    for (const phase of shiftPhases) {
-      if (req.body[phase]) {
-        detectedShiftPhase = phase;
-        const phaseSections = req.body[phase];  // <- Define it here
-        
-        for (const [sectionName, fields] of Object.entries(phaseSections)) {
-          if (!fields || typeof fields !== 'object') continue;
+    const {
+      userId, 
+      role, 
+      shiftId, 
+      is_operational_only, 
+      operational_details, 
+      fieldIds, 
+      sectionIds, 
+      selectedShiftPhase // This is the selected shift phase
+    } = req.body;
 
-          const fieldEntries = [];
-
-          // Iterate over fields and match fieldIds from the request
-          const sectionId = sectionIds[sections.length]; // Fetch the corresponding sectionId
-
-          for (const [key, value] of Object.entries(fields)) {
-            if (key === 'section_id') continue;
-            if (key.endsWith('_remarks')) continue;
-
-            let fieldId = fieldIds[sections.length] || null;  // Match fieldId from the request body
-            let fieldValue = value;
-
-            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-              fieldId = value.field_id || null;
-              fieldValue = value.value !== undefined ? value.value : '';
-            }
-
-            fieldEntries.push({
-              fieldName: key,
-              value: fieldValue,
-              fieldId: fieldId,  // Assign fieldId from the request body
-            });
-
-            const remarksKey = `${key}_remarks`;
-            if (fields[remarksKey]) {
-              fieldEntries.push({
-                fieldName: remarksKey,
-                value: fields[remarksKey],
-                fieldId: null,
-              });
-            }
-          }
-
-          sections.push({
-            sectionName,
-            sectionId: sectionId,  // Use sectionId from the request body
-            fields: fieldEntries,
-          });
-        }
-
-        break; // Only one shift phase should be active
-      }
+    // Check if required data exists
+    if (!userId || !role || !shiftId || !selectedShiftPhase) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
+    const allowedPhases = ['shiftBeg', 'shiftMid', 'shiftEnd', 'midnight','operational performed'];
+
+    // Validate that the selected phase is correct
+    if (!allowedPhases.includes(selectedShiftPhase)) {
+      return res.status(400).json({ success: false, message: 'Invalid shift phase selected' });
+    }
+
+    // Initialize sections array
+    const sections = [];
+    
+    // Get the sections for the selected shift phase from the request body
+    const phaseSections = req.body[selectedShiftPhase]; // Dynamically get the selected shift phase
+
+    // Process the fields for the selected shift phase
+    for (const [sectionName, fields] of Object.entries(phaseSections || {})) {
+      if (!fields || typeof fields !== 'object') continue;
+
+      const sectionId = sectionIds[sections.length] || null;
+      const fieldEntries = [];
+
+      // Process each field in the section
+      for (const [key, value] of Object.entries(fields)) {
+        if (key === 'section_id' || key.endsWith('_remarks')) continue;
+
+        let fieldId = fieldIds[sections.length] || null;
+        let fieldValue = value;
+
+        // Check for object value structure and extract field ID and value
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          fieldId = value.field_id || null;
+          fieldValue = value.value !== undefined ? value.value : '';
+        }
+
+        fieldEntries.push({ fieldName: key, value: fieldValue, fieldId });
+
+        // Check for remarks field
+        const remarksKey = `${key}_remarks`;
+        if (fields[remarksKey]) {
+          fieldEntries.push({
+            fieldName: remarksKey,
+            value: fields[remarksKey],
+            fieldId: null,
+          });
+        }
+      }
+
+      sections.push({ sectionName, sectionId, fields: fieldEntries });
+    }
+
+    // Construct the data to submit
     const submissionData = {
       userId,
       role,
       shiftId,
-      shiftPhase: detectedShiftPhase,
+      shiftPhase: selectedShiftPhase, // Store selected shift phase
       sections,
       isOperationalOnly: is_operational_only === 'true',
     };
@@ -108,6 +118,7 @@ const submitLogbook = async (req, res) => {
       }));
     }
 
+    // Create and save the logbook submission
     const submission = new LogbookSubmission(submissionData);
     await submission.save();
 

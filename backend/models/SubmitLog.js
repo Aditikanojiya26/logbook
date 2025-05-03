@@ -20,7 +20,7 @@ const logbookSubmissionSchema = new mongoose.Schema(
     },
     shiftPhase: {
       type: String,
-      enum: ["shiftBeg", "shiftMid", "shiftEnd", "midnight"],
+      enum: ["shiftBeg", "shiftMid", "shiftEnd", "midnight","operational performed"],
       
     },
     sections: [

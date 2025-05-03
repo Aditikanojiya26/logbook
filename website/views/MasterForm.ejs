@@ -25,15 +25,15 @@
         <select id="unitId" name="unit" class="form-control" required>
           <option value="">Select Unit</option>
           <% units.forEach(function(unit) { %>
-            <option value="<%= unit.name %>">
+            <option value="<%= unit._id %>">
               <%= unit.name %>
             </option>
             <% }); %>
               <option value="all">All</option>
         </select>
-
         <div class="invalid-feedback">Please provide a Unit ID.</div>
       </div>
+
       <div class="col-md-6">
         <label for="role" class="form-label">Role</label>
         <select name="role" class="form-control" required>
