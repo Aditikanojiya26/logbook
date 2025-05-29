@@ -9,38 +9,43 @@
   <!-- Bootstrap CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/logform.css">
- 
+
 
 
 </head>
 
 <body>
   <form action="/submit" method="POST">
-  <div class="container mt-3">
-    <h1 class="mb-4">Unit-<%= form.unit %> | Logbook Form | Role: <%= form.role %>
-    </h1>
-    <input type="hidden" name="selectedShiftPhase" id="selectedShiftPhase">
-    <!-- Nav Tabs for Shift Sections -->
-    <ul class="nav nav-tabs" id="logbookTabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab" aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid" aria-selected="false">Shift Mid</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd" aria-selected="false">Shift End</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight" aria-selected="false">Midnight</a>
-      </li>
-      <% if (form.has_operational_performed_section) { %>
-      <li class="nav-item">
-        <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab" aria-controls="operational" aria-selected="false">Operational Performed</a>
-      </li>
-      <% } %>
-    </ul>
-    
+    <div class="container mt-3">
+      <h1 class="mb-4">Unit-<%= unitName %> | Logbook Form | Role: <%= form.role %>
+      </h1>
+      <input type="hidden" name="selectedShiftPhase" id="selectedShiftPhase">
+      <!-- Nav Tabs for Shift Sections -->
+      <ul class="nav nav-tabs" id="logbookTabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="shiftBeg-tab" data-toggle="tab" href="#shiftBeg" role="tab"
+            aria-controls="shiftBeg" aria-selected="true">Shift Beginning</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="shiftMid-tab" data-toggle="tab" href="#shiftMid" role="tab" aria-controls="shiftMid"
+            aria-selected="false">Shift Mid</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="shiftEnd-tab" data-toggle="tab" href="#shiftEnd" role="tab" aria-controls="shiftEnd"
+            aria-selected="false">Shift End</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="midnight-tab" data-toggle="tab" href="#midnight" role="tab" aria-controls="midnight"
+            aria-selected="false">Midnight</a>
+        </li>
+        <% if (form.has_operational_performed_section) { %>
+          <li class="nav-item">
+            <a class="nav-link" id="operational-tab" data-toggle="tab" href="#operational" role="tab"
+              aria-controls="operational" aria-selected="false">Operational Performed</a>
+          </li>
+          <% } %>
+      </ul>
+
       <!-- Tab Content -->
       <div class="tab-content" id="logbookTabsContent">
         <% ['shiftBeg', 'shiftMid' , 'shiftEnd' , 'midnight' ].forEach(shift=> { %>
@@ -68,30 +73,39 @@
                           <input type="<%= field.field_type %>" class="form-control"
                             name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]"
                             id="<%= field.field_name %>" min="<%= field.min_value || '' %>"
-                            max="<%= field.max_value || '' %>" />
+                            max="<%= field.max_value || '' %>"
+                            value="<%= prefillData?.[shift]?.[section.section_name]?.[field.field_name] || '' %>" />
                           <% } else if (field.field_type==='select' ) { %>
                             <select class="form-control"
                               name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
                               <% const opts=field.options || []; %>
-                                <% opts.forEach(opt=> { %>
-                                  <option value="<%= opt.trim() %>">
+                                <% opts.forEach(opt=> {
+                                  const selectedValue = prefillData?.[shift]?.[section.section_name]?.[field.field_name];
+                                  const isSelected = selectedValue === opt.trim() ? 'selected' : '';
+                                  %>
+                                  <option value="<%= opt.trim() %>" <%=isSelected %>>
                                     <%= opt.trim() %>
                                   </option>
                                   <% }); %>
-
                             </select>
+
                             <% } else if (field.field_type==='checkbox' ) { %>
                               <% const opts=field.options || []; %>
-                                <% opts.forEach((opt, i)=> { %>
+                                <% opts.forEach((opt, i)=> {
+                                  const checkedValues = prefillData?.[shift]?.[section.section_name]?.[field.field_name] ||
+                                  [];
+                                  const isChecked = checkedValues.includes(opt.trim()) ? 'checked' : '';
+                                  %>
                                   <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
                                       name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>][]"
-                                      value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" />
+                                      value="<%= opt.trim() %>" id="<%= field.field_name %>_<%= i %>" <%=isChecked %> />
                                     <label class="form-check-label" for="<%= field.field_name %>_<%= i %>">
                                       <%= opt.trim() %>
                                     </label>
                                   </div>
                                   <% }); %>
+
 
                                     <% } %>
 
@@ -103,7 +117,7 @@
 
                                           <!-- Add hidden input for field_id (MongoDB generated _id) -->
                                           <input type="hidden" name="fieldIds[]" value="<%= field._id %>">
-                                          
+
                       </div>
                       <% }) %>
 
@@ -126,12 +140,12 @@
                         <div class="form-row mb-2">
                           <div class="col-md-4">
                             <label for="operational_time_0">Time</label>
-                            <input type="time" name="operational_details[0][time]" class="form-control"  />
+                            <input type="time" name="operational_details[0][time]" class="form-control" />
                           </div>
                           <div class="col-md-8">
                             <label for="operational_description_0">Description</label>
                             <input type="text" name="operational_details[0][description]" class="form-control"
-                              placeholder="Enter description"  />
+                              placeholder="Enter description" />
                           </div>
                         </div>
                       </div>
@@ -144,19 +158,19 @@
                   </div>
                   <% } %>
       </div>
-     
+
 
       <input type="hidden" name="userId" value="<%= permission.userId %>">
       <input type="hidden" name="shiftId" value="<%= permission.shiftId %>">
-      
+
       <input type="hidden" name="role" value="<%= form.role %>">
-      
-      
-  </div>
-  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+
+
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
   </form>
   <!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script>
     //Date & Time
@@ -209,64 +223,64 @@
     function removeOperationalRow(button) {
       button.closest('.form-row').remove(); // jQuery method to remove the row
     }
-   
-  // Add event listeners to each tab to update the hidden input field with the selected shift phase
-  $('#logbookTabs a').on('click', function() {
-    const selectedTab = $(this).attr('id');
-    let selectedShiftPhase = '';
 
-    // Map the tab IDs to the corresponding shift phase
-    switch (selectedTab) {
-      case 'shiftBeg-tab':
-        selectedShiftPhase = 'shiftBeg';
-        break;
-      case 'shiftMid-tab':
-        selectedShiftPhase = 'shiftMid';
-        break;
-      case 'shiftEnd-tab':
-        selectedShiftPhase = 'shiftEnd';
-        break;
-      case 'midnight-tab':
-        selectedShiftPhase = 'midnight';
-        break;
-      case 'operational-tab':
-        selectedShiftPhase = 'operational performed';
-        break;
-      default:
-        selectedShiftPhase = 'shiftBeg'; // Default to shiftBeg if none is selected
-    }
+    // Add event listeners to each tab to update the hidden input field with the selected shift phase
+    $('#logbookTabs a').on('click', function () {
+      const selectedTab = $(this).attr('id');
+      let selectedShiftPhase = '';
 
-    // Set the value of the hidden input field to the selected shift phase
-    $('#selectedShiftPhase').val(selectedShiftPhase);
-  });
+      // Map the tab IDs to the corresponding shift phase
+      switch (selectedTab) {
+        case 'shiftBeg-tab':
+          selectedShiftPhase = 'shiftBeg';
+          break;
+        case 'shiftMid-tab':
+          selectedShiftPhase = 'shiftMid';
+          break;
+        case 'shiftEnd-tab':
+          selectedShiftPhase = 'shiftEnd';
+          break;
+        case 'midnight-tab':
+          selectedShiftPhase = 'midnight';
+          break;
+        case 'operational-tab':
+          selectedShiftPhase = 'operational performed';
+          break;
+        default:
+          selectedShiftPhase = 'shiftBeg'; // Default to shiftBeg if none is selected
+      }
 
-  // Initialize the hidden input with the initial selected phase (if necessary)
-  $(document).ready(function() {
-    const initialTab = $('#logbookTabs .nav-link.active').attr('id');
-    let initialShiftPhase = '';
+      // Set the value of the hidden input field to the selected shift phase
+      $('#selectedShiftPhase').val(selectedShiftPhase);
+    });
 
-    switch (initialTab) {
-      case 'shiftBeg-tab':
-        initialShiftPhase = 'shiftBeg';
-        break;
-      case 'shiftMid-tab':
-        initialShiftPhase = 'shiftMid';
-        break;
-      case 'shiftEnd-tab':
-        initialShiftPhase = 'shiftEnd';
-        break;
-      case 'midnight-tab':
-        initialShiftPhase = 'midnight';
-        break;
-      case 'operational-tab':
-        initialShiftPhase = 'operational';
-        break;
-    }
+    // Initialize the hidden input with the initial selected phase (if necessary)
+    $(document).ready(function () {
+      const initialTab = $('#logbookTabs .nav-link.active').attr('id');
+      let initialShiftPhase = '';
 
-    // Set the value of the hidden input field to the initial shift phase
-    $('#selectedShiftPhase').val(initialShiftPhase);
-  });
-</script>
+      switch (initialTab) {
+        case 'shiftBeg-tab':
+          initialShiftPhase = 'shiftBeg';
+          break;
+        case 'shiftMid-tab':
+          initialShiftPhase = 'shiftMid';
+          break;
+        case 'shiftEnd-tab':
+          initialShiftPhase = 'shiftEnd';
+          break;
+        case 'midnight-tab':
+          initialShiftPhase = 'midnight';
+          break;
+        case 'operational-tab':
+          initialShiftPhase = 'operational';
+          break;
+      }
+
+      // Set the value of the hidden input field to the initial shift phase
+      $('#selectedShiftPhase').val(initialShiftPhase);
+    });
+  </script>
 
   </script>
   <!-- Bootstrap JS and dependencies -->

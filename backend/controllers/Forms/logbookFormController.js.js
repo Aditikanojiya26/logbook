@@ -1,6 +1,7 @@
 const LogbookForm = require("../../models/logbookForms");
 const LogbookSubmission = require('../../models/SubmitLog');
 const Permission = require("../../models/permission");
+const Unit = require("../../models/unit");
 const getFormByRole = async (req, res) => {
   const { role } = req.params;
 
@@ -9,21 +10,43 @@ const getFormByRole = async (req, res) => {
       return res.status(400).json({ error: 'User not authenticated or userId is missing' });
     }
     const form = await LogbookForm.findOne({ role });
-    
+
 
     const userId = req.user.userId;
     const permission = await Permission.findOne({ userId });
-   
+    const unit = await Unit.findById(permission.unitId);
+    const unitName = unit.name;
+
     if (!form) {
       return res.status(404).json({ error: "No form found for the given role" });
     }
-
-   
     const wantsHTML = req.headers.accept && req.headers.accept.includes("text/html");
+    const currentDate = new Date();
+    const logbookSubmissions = await LogbookSubmission.find({
+      $or: [
+        { createdAt: { $gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) } },
+        { updatedAt: { $gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) } }
+      ]
+    });
 
+    const prefillData = {};
+
+    logbookSubmissions.forEach((submission) => {
+      const shift = submission.shiftPhase;
+      if (!prefillData[shift]) prefillData[shift] = {};
+
+      submission.sections.forEach((section) => {
+        const sectionName = section.sectionName;
+        if (!prefillData[shift][sectionName]) prefillData[shift][sectionName] = {};
+
+        section.fields.forEach((field) => {
+          prefillData[shift][sectionName][field.fieldName] = field.value;
+        });
+      });
+    });
     if (wantsHTML) {
-      
-      res.render("logbookForm", { form,permission }); 
+
+      res.render("logbookForm", { form, permission, unitName, prefillData });
     } else {
       res.json(form);
     }
@@ -37,14 +60,13 @@ const getFormByRole = async (req, res) => {
 const submitLogbook = async (req, res) => {
   try {
     const {
-      userId, 
-      role, 
-      shiftId, 
-      is_operational_only, 
-      operational_details, 
-      fieldIds, 
-      sectionIds, 
-      selectedShiftPhase // This is the selected shift phase
+      userId,
+      role,
+      shiftId,
+      operational_details,
+      fieldIds,
+      sectionIds,
+      selectedShiftPhase,
     } = req.body;
 
     // Check if required data exists
@@ -52,7 +74,7 @@ const submitLogbook = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
-    const allowedPhases = ['shiftBeg', 'shiftMid', 'shiftEnd', 'midnight','operational performed'];
+    const allowedPhases = ['shiftBeg', 'shiftMid', 'shiftEnd', 'midnight', 'operational performed'];
 
     // Validate that the selected phase is correct
     if (!allowedPhases.includes(selectedShiftPhase)) {
@@ -61,7 +83,7 @@ const submitLogbook = async (req, res) => {
 
     // Initialize sections array
     const sections = [];
-    
+
     // Get the sections for the selected shift phase from the request body
     const phaseSections = req.body[selectedShiftPhase]; // Dynamically get the selected shift phase
 
@@ -108,7 +130,6 @@ const submitLogbook = async (req, res) => {
       shiftId,
       shiftPhase: selectedShiftPhase, // Store selected shift phase
       sections,
-      isOperationalOnly: is_operational_only === 'true',
     };
 
     if (operational_details) {
@@ -122,6 +143,7 @@ const submitLogbook = async (req, res) => {
     const submission = new LogbookSubmission(submissionData);
     await submission.save();
 
+
     res.status(200).json({ success: true, message: 'Logbook submitted successfully' });
   } catch (error) {
     console.error('Logbook submission failed:', error);
@@ -130,4 +152,4 @@ const submitLogbook = async (req, res) => {
 };
 
 
-module.exports = { getFormByRole,submitLogbook };
+module.exports = { getFormByRole, submitLogbook };
