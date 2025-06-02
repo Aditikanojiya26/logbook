@@ -6,6 +6,8 @@ const Parameter=require("../models/SCE_Parameter")
 exports.getAssignPermission = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
+    console.log(user.role);
+    
     if (!user || user.role !== "PDE") {
       return res.status(403).send("Access denied. Only PDEs can assign permissions.");
     }

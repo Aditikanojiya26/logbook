@@ -8,7 +8,9 @@ const authRoutes = require("./routes/authRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const sceRoutes = require("../backend/routes/sceRoutes");
 const adminRoutes = require("../backend/routes/adminRoutes");
-const logbookFormRoutes=require("../backend/routes/logbookFormRoutes")
+const logbookFormRoutes = require("../backend/routes/logbookFormRoutes");
+const registerRoutes = require("./routes/registerRoutes");
+const searchableLog = require("./routes/searchableLogsRoutes")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -24,12 +26,13 @@ app.set("views", path.join(__dirname, "../website/views"));
 app.use(express.static(path.join(__dirname, "../website/public")));
 
 // Routes
-
+app.use("/logRegister", registerRoutes);
 app.use("/", authRoutes);
+app.use("/", searchableLog);
 app.use("/", permissionRoutes);
 app.use("/", sceRoutes);
 app.use("/", shiftRoutes);
-app.use("/", logbookFormRoutes); 
+app.use("/", logbookFormRoutes);
 app.use("/admin", adminRoutes);
 // Start server
 app.listen(PORT, () => {

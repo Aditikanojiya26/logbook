@@ -32,7 +32,8 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const { user, token } = await User.matchPasswordAndGenerateToken(email, password);
-
+    console.log(user.role);
+    
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",

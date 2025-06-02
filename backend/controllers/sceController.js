@@ -12,28 +12,26 @@ const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-
-
 exports.getSCEData = async (req, res) => {
   try {
     const userId = req.user.userId;
     const permission = await Permission.findOne({ userId });
-    
-    
+
     if (!permission) {
-      return res.status(403).json({ msg: "Access denied: No permission for this user." });
+      return res
+        .status(403)
+        .json({ msg: "Access denied: No permission for this user." });
     }
     const existingData = await Sce.findOne({
       userId,
       shiftId: permission.shiftId,
-      unitId: permission.unitId
+      unitId: permission.unitId,
     });
     const parameterAuxiliaries = await ParameterAuxiliarySCE.find();
     const groupedParameterAux = {
       Beginning: [],
       End: [],
       Middle: [],
-
     };
 
     parameterAuxiliaries.forEach((aux) => {
@@ -56,11 +54,11 @@ exports.getSCEData = async (req, res) => {
       Beginning: [],
       Middle: [],
       End: [],
-      Midnight: []
+      Midnight: [],
     };
 
-    auxiliaries.forEach(aux => {
-      aux.shiftTime.forEach(shift => {
+    auxiliaries.forEach((aux) => {
+      aux.shiftTime.forEach((shift) => {
         if (!groupedAuxiliaries[shift]) {
           groupedAuxiliaries[shift] = [];
         }
@@ -68,16 +66,14 @@ exports.getSCEData = async (req, res) => {
       });
     });
 
-
-
     const groupedParams = {
       Beginning: {},
       Middle: {},
       End: {},
-      Midnight: {}
+      Midnight: {},
     };
 
-    parameters.forEach(param => {
+    parameters.forEach((param) => {
       const shift = param.shiftTime;
       const section = param.sectionName;
 
@@ -90,30 +86,40 @@ exports.getSCEData = async (req, res) => {
         name: param.name,
         inputType: param.inputType,
         unit: param.unit,
-        options: param.options
+        options: param.options,
       });
     });
 
     // Convert Maps back to arrays
     for (const shift in groupedParams) {
       for (const section in groupedParams[shift]) {
-        groupedParams[shift][section] = Array.from(groupedParams[shift][section].values());
+        groupedParams[shift][section] = Array.from(
+          groupedParams[shift][section].values()
+        );
       }
     }
 
-    
-
-    const isBrowser = req.headers.accept && req.headers.accept.includes("text/html");
+    const isBrowser =
+      req.headers.accept && req.headers.accept.includes("text/html");
 
     if (isBrowser) {
-      return res.render("sceForm.ejs", { auxiliaries: groupedAuxiliaries, parameters: groupedParams, parameterAuxiliaries: groupedParameterAux,permission});
+      return res.render("sceForm.ejs", {
+        auxiliaries: groupedAuxiliaries,
+        parameters: groupedParams,
+        parameterAuxiliaries: groupedParameterAux,
+        permission,
+      });
     } else {
-      return res.json({ auxiliaries: groupedAuxiliaries, parameters: groupedParams, parameterAuxiliaries: groupedParameterAux, SCE: SCE,completedSections });
+      return res.json({
+        auxiliaries: groupedAuxiliaries,
+        parameters: groupedParams,
+        parameterAuxiliaries: groupedParameterAux,
+        SCE: SCE,
+        completedSections,
+      });
     }
   } catch (error) {
     console.error("Error fetching SCE data:", error);
     res.status(500).json({ msg: "Internal Server Error" });
   }
 };
-
-
