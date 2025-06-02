@@ -162,12 +162,14 @@
 
       <input type="hidden" name="userId" value="<%= permission.userId %>">
       <input type="hidden" name="shiftId" value="<%= permission.shiftId %>">
-
+      <input type="hidden" name="unitId" value="<%= permission.unitId %>">
       <input type="hidden" name="role" value="<%= form.role %>">
 
-
+<div class="d-flex justify-content-center">
+  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</div>
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    
   </form>
   <!-- Include jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

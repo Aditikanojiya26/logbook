@@ -24,7 +24,7 @@ exports.getAssignPermission = async (req, res) => {
 };
 
 exports.assignPermission = async (req, res) => {
-  const { userId, shiftId, unitId } = req.body;
+  let { userId, shiftId, unitId } = req.body;
 
   try {
     const user = await User.findById(req.user.userId);
@@ -32,16 +32,24 @@ exports.assignPermission = async (req, res) => {
       return res.status(403).json({ msg: "Access denied. Only PDEs can assign permissions." });
     }
 
-    const selectedUser = await User.findById(userId);
+    userId = Array.isArray(userId) ? userId : [userId];
+
     const shift = await Shift.findById(shiftId);
     const unit = await Unit.findById(unitId);
-
-    if (!selectedUser || !shift || !unit) {
-      return res.status(404).json({ msg: "Invalid user, shift, or unit" });
+    if (!shift || !unit) {
+      return res.status(404).json({ msg: "Invalid shift or unit" });
     }
 
-    const newPermission = new Permission({ userId, shiftId, unitId });
-    await newPermission.save();
+    for (const id of userId) {
+      const selectedUser = await User.findById(id);
+      if (!selectedUser) continue;
+
+      const existing = await Permission.findOne({ userId: id, shiftId, unitId });
+      if (!existing) {
+        const newPermission = new Permission({ userId: id, shiftId, unitId });
+        await newPermission.save();
+      }
+    }
 
     res.redirect("/assign-permission");
   } catch (err) {
@@ -49,4 +57,5 @@ exports.assignPermission = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
 

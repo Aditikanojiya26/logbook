@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const logbookSubmissionSchema = new mongoose.Schema(
   {
+    unitId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Unit",
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -69,7 +69,7 @@ const getFormByRole = async (req, res) => {
       });
     });
     if (wantsHTML) {
-      res.render("logbookForm", { form, permission, unitName, prefillData });
+      res.render("logbookForm", { form, permission, unitName, prefillData});
     } else {
       res.json(form);
     }
@@ -81,7 +81,7 @@ const getFormByRole = async (req, res) => {
 //Submit Log
 const submitLogbook = async (req, res) => {
   try {
-    const { userId, role, shiftId, selectedShiftPhase } = req.body;
+    const { unitId ,userId, role, shiftId, selectedShiftPhase } = req.body;
 
     if (!userId || !role || !shiftId || !selectedShiftPhase) {
       return res
@@ -123,6 +123,7 @@ const submitLogbook = async (req, res) => {
 //Functions
 function createSubmissionData(body) {
   const {
+    unitId,
     userId,
     role,
     shiftId,
@@ -184,6 +185,7 @@ function createSubmissionData(body) {
   }
 
   const submissionData = {
+    unitId,
     userId,
     role,
     shiftId,
