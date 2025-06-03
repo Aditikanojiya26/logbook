@@ -4,7 +4,12 @@ const LogbookSubmission = require("../../models/SubmitLog");
 const Permission = require("../../models/permission");
 const Unit = require("../../models/unit");
 const LogBookRegister = require("../../models/logBookRegister");
-const { createLogEntry, } = require("./logBookRegisterController");
+const {
+  createLogEntry,
+  prefillData,
+  getCurrentShiftWindow,
+  createPrefill,
+} = require("./logBookRegisterController");
 
 const getFormByRole = async (req, res) => {
   const { role } = req.params;
@@ -28,48 +33,26 @@ const getFormByRole = async (req, res) => {
     }
     const wantsHTML =
       req.headers.accept && req.headers.accept.includes("text/html");
-    const currentDate = new Date();
-    const logbookSubmissions = await LogbookSubmission.find({
-      $or: [
-        {
-          createdAt: {
-            $gte: new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate()
-            ),
-          },
-        },
-        {
-          updatedAt: {
-            $gte: new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate()
-            ),
-          },
-        },
-      ],
+
+    const { shiftStart, shiftEnd } = getCurrentShiftWindow();
+
+    const entry = await LogBookRegister.findOne({
+      role,
+      unitId: permission.unitId,
+      shiftId: permission.shiftId,
+      createdAt: { $gte: shiftStart, $lte: shiftEnd },
     });
 
-    const prefillData = {};
+    let prefillData = {};
 
-    logbookSubmissions.forEach((submission) => {
-      const shift = submission.shiftPhase;
-      if (!prefillData[shift]) prefillData[shift] = {};
+    if (entry) {
+      prefillData = await createPrefill(entry.logEntryId);
+    }
 
-      submission.sections.forEach((section) => {
-        const sectionName = section.sectionName;
-        if (!prefillData[shift][sectionName])
-          prefillData[shift][sectionName] = {};
+    console.log("Prefill Data:", prefillData);
 
-        section.fields.forEach((field) => {
-          prefillData[shift][sectionName][field.fieldName] = field.value;
-        });
-      });
-    });
     if (wantsHTML) {
-      res.render("logbookForm", { form, permission, unitName, prefillData});
+      res.render("logbookForm", { form, permission, unitName, prefillData });
     } else {
       res.json(form);
     }
@@ -81,7 +64,7 @@ const getFormByRole = async (req, res) => {
 //Submit Log
 const submitLogbook = async (req, res) => {
   try {
-    const { unitId ,userId, role, shiftId, selectedShiftPhase } = req.body;
+    const { unitId, userId, role, shiftId, selectedShiftPhase } = req.body;
 
     if (!userId || !role || !shiftId || !selectedShiftPhase) {
       return res
@@ -99,7 +82,7 @@ const submitLogbook = async (req, res) => {
     //Create or update entry in register
     const logEntryData = {
       userId: userId,
-      unitId: "680caa609e539c519db0c275",
+      unitId: unitId,
       role: role,
       shiftId: shiftId,
       phase: selectedShiftPhase,

@@ -160,7 +160,7 @@ const createPrefill = async (logEntryIds) => {
       });
     });
   }
-
+  console.log(JSON.stringify(prefillData, null, 2));
   return prefillData;
 };
 

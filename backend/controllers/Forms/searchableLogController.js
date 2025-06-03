@@ -38,6 +38,7 @@ const viewLogEntry = async (req, res) => {
       [phase]: logDataId,
     };
     const prefillData = await createPrefill(prefillDataParams);
+    console.log(prefillData);
     res.json({ success: true, data: prefillData });
   } catch (e) {
     console.log(e);
