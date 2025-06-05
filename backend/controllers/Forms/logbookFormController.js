@@ -6,7 +6,6 @@ const Unit = require("../../models/unit");
 const LogBookRegister = require("../../models/logBookRegister");
 const {
   createLogEntry,
-  prefillData,
   getCurrentShiftWindow,
   createPrefill,
 } = require("./logBookRegisterController");
@@ -44,15 +43,17 @@ const getFormByRole = async (req, res) => {
     });
 
     let prefillData = {};
+    let shiftPhase = {}; 
 
     if (entry) {
       prefillData = await createPrefill(entry.logEntryId);
+      shiftPhase = entry.shiftPhase;
     }
 
     console.log("Prefill Data:", prefillData);
 
     if (wantsHTML) {
-      res.render("logbookForm", { form, permission, unitName, prefillData });
+      res.render("logbookForm", { form, permission, unitName, prefillData,shiftPhase });
     } else {
       res.json(form);
     }

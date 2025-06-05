@@ -55,7 +55,7 @@
               role="tabpanel" aria-labelledby="<%= shift %>-tab">
 
               <% form[shift].section.forEach(section=> { %>
-                <fieldset class="border p-3 my-2">
+                <fieldset class="border p-3 my-2" <%=shiftPhase[shift] ? "disabled" : "" %>>
                   <legend class="w-auto">
                     <%= section.section_name %>
                   </legend>
@@ -80,7 +80,8 @@
                               name="<%= shift %>[<%= section.section_name %>][<%= field.field_name %>]">
                               <% const opts=field.options || []; %>
                                 <% opts.forEach(opt=> {
-                                  const selectedValue = prefillData?.[shift]?.[section.section_name]?.[field.field_name];
+                                  const selectedValue =
+                                  prefillData?.[shift]?.[section.section_name]?.[field.field_name];
                                   const isSelected = selectedValue === opt.trim() ? 'selected' : '';
                                   %>
                                   <option value="<%= opt.trim() %>" <%=isSelected %>>
@@ -92,7 +93,8 @@
                             <% } else if (field.field_type==='checkbox' ) { %>
                               <% const opts=field.options || []; %>
                                 <% opts.forEach((opt, i)=> {
-                                  const checkedValues = prefillData?.[shift]?.[section.section_name]?.[field.field_name] ||
+                                  const checkedValues = prefillData?.[shift]?.[section.section_name]?.[field.field_name]
+                                  ||
                                   [];
                                   const isChecked = checkedValues.includes(opt.trim()) ? 'checked' : '';
                                   %>
@@ -127,6 +129,12 @@
                   </div>
                 </fieldset>
                 <% }) %>
+                  <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn mt-3" <%=shiftPhase[shift] ? "disabled" : "" %>>
+                      Submit
+                    </button>
+                  </div>
+
             </div>
             <% } %>
               <% }) %>
@@ -155,21 +163,24 @@
                         More</button>
 
                     </fieldset>
+                    <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mt-3">
+                      Submit
+                    </button>
+                    </div>
                   </div>
                   <% } %>
+
+
+                    <input type="hidden" name="userId" value="<%= permission.userId %>">
+                    <input type="hidden" name="shiftId" value="<%= permission.shiftId %>">
+                    <input type="hidden" name="unitId" value="<%= permission.unitId %>">
+                    <input type="hidden" name="role" value="<%= form.role %>">
+
+
       </div>
-
-
-      <input type="hidden" name="userId" value="<%= permission.userId %>">
-      <input type="hidden" name="shiftId" value="<%= permission.shiftId %>">
-      <input type="hidden" name="unitId" value="<%= permission.unitId %>">
-      <input type="hidden" name="role" value="<%= form.role %>">
-
-<div class="d-flex justify-content-center">
-  <button type="submit" class="btn btn-primary mt-3">Submit</button>
-</div>
     </div>
-    
+
   </form>
   <!-- Include jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
